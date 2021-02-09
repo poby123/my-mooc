@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// In App.js in a new project
+import * as React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+const styles = StyleSheet.create({
+	container: {
+		height: "100vh",
+		alignItems: "center",
+		justifyContent: "center",
+  },
+});
+
+function HomeScreen() {
+	return (
+		<View style={styles.container}>
+			<Text>Home Screen</Text>
+		</View>
+	);
+}
+
+const Stack = createStackNavigator();
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<NavigationContainer>
+			<Stack.Navigator>
+				<Stack.Screen name="Home" component={HomeScreen} />
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
 }
 
 export default App;
