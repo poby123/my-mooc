@@ -1,35 +1,49 @@
-// In App.js in a new project
-import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
-const styles = StyleSheet.create({
-	container: {
-		height: "100vh",
-		alignItems: "center",
-		justifyContent: "center",
-  },
-});
+import * as React from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { IoHome, IoSettingsOutline } from 'react-icons/io5';
 
 function HomeScreen() {
-	return (
-		<View style={styles.container}>
-			<Text>Home Screen</Text>
-		</View>
-	);
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home!</Text>
+    </View>
+  );
 }
 
-const Stack = createStackNavigator();
-
-function App() {
-	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen name="Home" component={HomeScreen} />
-			</Stack.Navigator>
-		</NavigationContainer>
-	);
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
 }
 
-export default App;
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let icons = {
+              Home: <IoHome name={'Home'} size={size} color={color} />,
+              Settings: <IoSettingsOutline name={'Settings'} size={size} color={color} />,
+            };
+            return icons[route.name];
+          },
+        })}
+        tabBarOptions={{
+          showLabel: false,
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
