@@ -1,42 +1,59 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const port = process.env.PORT || 3000;
+const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+
+  // Path to the entry file, change it according to the path you have
+  entry: path.join(__dirname, '/src/index.js'),
+
+  // Path for the output files
   output: {
-    filename: './bundle.[hash].js',
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js',
   },
+
+  // Enable source map support
+  devtool: 'source-map',
+
+  // Loaders and resolver config
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        test: /\.js$/,
+        exclude: /node_modules[/\\](?!react-native-vector-icons)/,
         use: {
           loader: 'babel-loader',
+          options: {
+            // Disable reading babel configuration
+            babelrc: false,
+            configFile: false,
+
+            // The configuration for compilation
+            presets: [
+              ['@babel/preset-env', { useBuiltIns: 'usage' }],
+              '@babel/preset-react',
+              '@babel/preset-flow',
+              '@babel/preset-typescript',
+            ],
+            plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread'],
+          },
         },
       },
       {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
+        test: /\.(jpg|png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'file-loader',
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: 'public/index.html',
-    }),
-  ],
+  resolve: {
+    alias: {
+      'react-native$': require.resolve('react-native-web'),
+    },
+  },
+
+  // Development server config
   devServer: {
-    host: 'localhost',
-    port: port,
-    open: true,
+    contentBase: [path.join(__dirname, 'public')],
+    historyApiFallback: true,
   },
 };
