@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import { IconButton } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { Text, View, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
+import WriterComponent from './WriterComponent';
+import ContentComponent from './ContentComponent';
+import Theme from '../Theme';
+import FavoriteComponent from './FavoriteComponent';
 
 const mockData = [
   {
@@ -13,11 +14,12 @@ const mockData = [
     },
     content: {
       date: '2021.02.10 12:16',
+      image: 'https://cdn.pixabay.com/photo/2016/11/29/04/19/ocean-1867285_1280.jpg',
       content:
         'To be able to interact with the screen component, we need to use navigation.setOptions to define our button instead of the options prop. By using navigation.setOptions inside the screen component, we get access to screens props, state, context etc.',
       files: ['file link1, file link2'],
-      myLove: true,
-      love: 9,
+      myFavorite: true,
+      favorite: 9,
     },
     comment: [
       {
@@ -51,8 +53,8 @@ const mockData = [
       content:
         'To be able to interact with the screen component, we need to use navigation.setOptions to define our button instead of the options prop. By using navigation.setOptions inside the screen component, we get access to screens props, state, context etc.',
       files: ['file link1, file link2'],
-      myLove: true,
-      love: 9,
+      myFavorite: true,
+      favorite: 9,
     },
     comment: [
       {
@@ -86,8 +88,8 @@ const mockData = [
       content:
         'To be able to interact with the screen component, we need to use navigation.setOptions to define our button instead of the options prop. By using navigation.setOptions inside the screen component, we get access to screens props, state, context etc.',
       files: ['file link1, file link2'],
-      myLove: true,
-      love: 9,
+      myFavorite: true,
+      favorite: 9,
     },
     comment: [
       {
@@ -112,41 +114,7 @@ const mockData = [
   },
 ];
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    marginTop: '0.3em',
-    marginLeft: '0.5em',
-    marginBottom: '0.3em',
-    marginRight: '0.5em',
-    paddingTop: '1em',
-    fontFamily: 'Nanum Gothic',
-  },
-  writerContainer: {
-    flexDirection: 'row',
-  },
-  writerSubContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  profileImage: {
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    marginRight: '1em',
-  },
-  contentContainer: {
-    flexDirection: 'column',
-  },
-  contentLoveContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    color: 'red',
-  },
-  loveButton: {
-    width: '50px',
-  },
-});
+const styles = StyleSheet.create(Theme);
 
 export default class ListComponent extends React.PureComponent {
   constructor(props) {
@@ -164,35 +132,21 @@ export default class ListComponent extends React.PureComponent {
       const writer = data.writer;
       const content = data.content;
       return (
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor="#DBE8F1"
-          onPress={() => {
-            console.log(`${data.id} content is pressed`);
-            this.props.navigation.push('Board', data);
-          }}
-          style={styles.container}
-          key={data.id}
-        >
-          <React.Fragment>
-            <View style={styles.writerContainer}>
-              <Image style={styles.profileImage} source={{ uri: writer.image }} />
-              <View style={styles.writerSubContainer}>
-                <Text>{writer.name}</Text>
-                <Text>{content.date}</Text>
-              </View>
-            </View>
-            <View style={styles.contentContainer}>
-              <Text style={{ fontFamily: 'inherit' }}>{content.content}</Text>
-              <View style={styles.contentLoveContainer}>
-                <IconButton color="inherit" onClick={() => console.log('pressed')}>
-                  {content.myLove ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                </IconButton>
-                <Text styles={{ color: 'red', width: '20px' }}>{content.love}</Text>
-              </View>
-            </View>
-          </React.Fragment>
-        </TouchableHighlight>
+        <View style={styles.container} key={data.id}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor="#DBE8F1"
+            onPress={() => {
+              this.props.navigation.push('Board', data);
+            }}
+          >
+            <React.Fragment>
+              <WriterComponent image={writer.image} name={writer.name} date={content.date} />
+              <ContentComponent image={content.image} content={content.content} />
+            </React.Fragment>
+          </TouchableHighlight>
+          <FavoriteComponent favoriteNumber={content.favorite} myFavorite={content.myFavorite} />
+        </View>
       );
     });
     return <ScrollView>{ContentList}</ScrollView>;

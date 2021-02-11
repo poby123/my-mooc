@@ -32,7 +32,6 @@ export default function HomeStackScreen() {
           headerTitleStyle: {
             fontFamily: 'Nanum Gothic',
             fontWeight: 'bold',
-            color: '#FFFFFF',
           },
         }}
       />
