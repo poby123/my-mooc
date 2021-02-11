@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { IoHome, IoSettingsOutline, IoSettings, IoLayersOutline, IoLayers } from 'react-icons/io5';
+import { IoHomeOutline, IoHome, IoSettingsOutline, IoSettings, IoLayersOutline, IoLayers } from 'react-icons/io5';
 import HomeScreen from './screens/HomeScreen';
 import LayerScreen from './screens/LayerScreen';
 import SettingScreen from './screens/SettingScreen';
 
 const Tab = createBottomTabNavigator();
-
-export default class App extends React.PureComponent {
+class App extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <NavigationContainer>
@@ -16,7 +18,7 @@ export default class App extends React.PureComponent {
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let icons = {
-                Home: <IoHome size={size} color={color} />,
+                Home: focused ? <IoHome size={size} color={color} /> : <IoHomeOutline size={size} color={color} />,
                 Layer: focused ? <IoLayers size={size} color={color} /> : <IoLayersOutline size={size} color={color} />,
                 Setting: focused ? (
                   <IoSettings size={size} color={color} />
@@ -41,3 +43,5 @@ export default class App extends React.PureComponent {
     );
   }
 }
+
+export default App;
