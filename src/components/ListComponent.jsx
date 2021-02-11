@@ -119,13 +119,16 @@ const styles = StyleSheet.create(Theme);
 export default class ListComponent extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.props = props;
+    if (this.props.route.params) {
+      this.category = this.props.route.params;
+      this.props.navigation.setOptions({ headerTitle: this.category.title });
+    }
   }
   componentDidMount() {
     console.log('component is mounted');
   }
   componentWillUnmount() {
-    console.log('component did unmounted.');
+    // this.props.navigation.setOptions({ headerTitle: 'MOOC' });
   }
   render() {
     const ContentList = mockData.map((data) => {

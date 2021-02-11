@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text, View, TouchableHighlight, ScrollView, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import HeaderOptions from '../HeaderOptions';
+import ListComponent from '../components/ListComponent';
+import BoardComponent from '../components/BoardComponent';
 
 const mockData = [
   {
@@ -35,13 +38,14 @@ class LayerScreen extends React.PureComponent {
     console.log('component did unmounted.');
   }
   render() {
+    const { navigation } = this.props;
     const ContentList = mockData.map((data) => {
       return (
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor="#DBE8F1"
           onPress={() => {
-            console.log(`${data.id} content is pressed`);
+            navigation.push('BoardList', data);
           }}
           style={styles.container}
           key={data.id}
@@ -60,22 +64,10 @@ const LayerStack = createStackNavigator();
 
 export default function LayerStackScreen() {
   return (
-    <LayerStack.Navigator>
-      <LayerStack.Screen
-        name="Layer"
-        component={LayerScreen}
-        options={{
-          headerTitle: 'MOOC',
-          headerStyle: {
-            backgroundColor: '#2399E7',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontFamily: 'Nanum Gothic',
-            fontWeight: 'bold',
-          },
-        }}
-      />
+    <LayerStack.Navigator initialRouteName={'Layer'}>
+      <LayerStack.Screen name="Layer" component={LayerScreen} options={HeaderOptions} />
+      <LayerStack.Screen name="BoardList" component={ListComponent} options={HeaderOptions} />
+      <LayerStack.Screen name="Board" component={BoardComponent} options={HeaderOptions} />
     </LayerStack.Navigator>
   );
 }
