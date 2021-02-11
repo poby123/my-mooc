@@ -140,7 +140,7 @@ export default class ListComponent extends React.PureComponent {
             activeOpacity={0.8}
             underlayColor="#DBE8F1"
             onPress={() => {
-              this.props.navigation.push('Board', data);
+              this.props.navigation.push('Board', { data: data, category: this.category });
             }}
           >
             <React.Fragment>

@@ -12,8 +12,11 @@ export default class BoardComponent extends React.PureComponent {
   state = { comment: '' };
   constructor(props) {
     super(props);
-    this.props = props;
-    this.mockData = props.route.params;
+    this.mockData = props.route.params.data;
+    this.category = props.route.params.category;
+
+    this.category && this.props.navigation.setOptions({ headerTitle: this.category.title });
+
     this.handleCommentBox = this.handleCommentBox.bind(this);
     this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
   }
