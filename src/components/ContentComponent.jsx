@@ -15,7 +15,7 @@ export default class ContentComponent extends React.PureComponent {
     return (
       <View style={styles.contentContainer}>
         {image && <Image source={{ uri: image }} style={{ minHeight: '300px' }} />}
-        <Text style={{ fontFamily: 'inherit' }}>{content}</Text>
+        <Text style={styles.contentContent}>{content}</Text>
       </View>
     );
   }
