@@ -1,9 +1,19 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { IoHomeOutline, IoHome, IoSettingsOutline, IoSettings, IoLayersOutline, IoLayers } from 'react-icons/io5';
+import {
+  IoHomeOutline,
+  IoHome,
+  IoSettingsOutline,
+  IoSettings,
+  IoLayersOutline,
+  IoLayers,
+  IoAddCircleOutline,
+  IoAddCircle,
+} from 'react-icons/io5';
 import HomeScreen from './screens/HomeScreen';
 import LayerScreen from './screens/LayerScreen';
+import PostScreen from './screens/PostScreen';
 import SettingScreen from './screens/SettingScreen';
 
 const Tab = createBottomTabNavigator();
@@ -20,6 +30,11 @@ class App extends React.PureComponent {
               let icons = {
                 Home: focused ? <IoHome size={size} color={color} /> : <IoHomeOutline size={size} color={color} />,
                 Layer: focused ? <IoLayers size={size} color={color} /> : <IoLayersOutline size={size} color={color} />,
+                Post: focused ? (
+                  <IoAddCircle size={size} color={color} />
+                ) : (
+                  <IoAddCircleOutline size={size} color={color} />
+                ),
                 Setting: focused ? (
                   <IoSettings size={size} color={color} />
                 ) : (
@@ -37,6 +52,7 @@ class App extends React.PureComponent {
         >
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Layer" component={LayerScreen} />
+          <Tab.Screen name="Post" component={PostScreen} />
           <Tab.Screen name="Setting" component={SettingScreen} />
         </Tab.Navigator>
       </NavigationContainer>

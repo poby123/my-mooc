@@ -60,6 +60,42 @@ const styles = {
   commentPostButton: {
     border: '1px solid red',
   },
+
+  /* */
+  postContainer: {
+    marginTop: '0.3em',
+    marginLeft: '0.5em',
+    marginBottom: '0.5em',
+    marginRight: '0.5em',
+    fontFamily: 'Nanum Gothic',
+    flexDirection: 'column',
+  },
+  postSubContainer: {
+    borderRadius: '5px',
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    border: '1px solid gray',
+    padding: '1em',
+  },
+  postSelect: {
+    color: '#FF0000',
+  },
+  postLabel: {
+    flex: 5,
+  },
+  postInput: {
+    borderRadius: '5px',
+    border: '1px solid gray',
+    padding: '1em',
+    backgroundColor: '#FFFFFF',
+    height: '50vh',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  postButton: {
+
+  },
 };
 
 export default styles;
