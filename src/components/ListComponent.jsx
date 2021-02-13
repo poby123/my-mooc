@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, FlatList } from 'react-native';
 import WriterComponent from './WriterComponent';
 import ContentComponent from './ContentComponent';
 import Theme from '../Theme';
@@ -131,27 +131,24 @@ export default class ListComponent extends React.PureComponent {
     // this.props.navigation.setOptions({ headerTitle: 'MOOC' });
   }
   render() {
-    const ContentList = mockData.map((data) => {
-      const writer = data.writer;
-      const content = data.content;
-      return (
-        <View style={styles.container} key={data.id}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor="#DBE8F1"
-            onPress={() => {
-              this.props.navigation.push('Board', { data: data, category: this.category });
-            }}
-          >
-            <React.Fragment>
-              <WriterComponent image={writer.image} name={writer.name} date={content.date} />
-              <ContentComponent image={content.image} content={content.content} />
-            </React.Fragment>
-          </TouchableHighlight>
-          <FavoriteComponent favoriteNumber={content.favorite} myFavorite={content.myFavorite} />
-        </View>
-      );
-    });
-    return <ScrollView>{ContentList}</ScrollView>;
+    const renderItem = ({ item }) => (
+      <View style={styles.container}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor="#DBE8F1"
+          onPress={() => {
+            this.props.navigation.push('Board', { data: item, category: this.category });
+          }}
+        >
+          <React.Fragment>
+            <WriterComponent image={item.writer.image} name={item.writer.name} date={item.content.date} />
+            <ContentComponent image={item.content.image} content={item.content.content} />
+          </React.Fragment>
+        </TouchableHighlight>
+        <FavoriteComponent favoriteNumber={item.content.favorite} myFavorite={item.content.myFavorite} />
+      </View>
+    );
+
+    return <FlatList data={mockData} renderItem={renderItem} keyExtractor={(item) => item.id} />;
   }
 }
