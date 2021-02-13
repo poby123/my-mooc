@@ -133,6 +133,7 @@ export default class ListComponent extends React.PureComponent {
   render() {
     const renderItem = ({ item }) => (
       <View style={styles.container}>
+        <WriterComponent image={item.writer.image} name={item.writer.name} date={item.content.date} />
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor="#DBE8F1"
@@ -140,10 +141,7 @@ export default class ListComponent extends React.PureComponent {
             this.props.navigation.push('Board', { data: item, category: this.category });
           }}
         >
-          <React.Fragment>
-            <WriterComponent image={item.writer.image} name={item.writer.name} date={item.content.date} />
-            <ContentComponent image={item.content.image} content={item.content.content} />
-          </React.Fragment>
+          <ContentComponent image={item.content.image} content={item.content.content} />
         </TouchableHighlight>
         <FavoriteComponent favoriteNumber={item.content.favorite} myFavorite={item.content.myFavorite} />
       </View>

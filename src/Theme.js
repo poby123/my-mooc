@@ -8,9 +8,11 @@ const styles = {
     fontFamily: 'Nanum Gothic',
   },
   writerContainer: {
-    flexDirection: 'row',
     marginTop: '1em',
     paddingLeft: '0.5em',
+    paddingRight: '0.5em',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   writerSubContainer: {
     flexDirection: 'column',
@@ -22,6 +24,17 @@ const styles = {
     borderRadius: '50%',
     marginRight: '1em',
   },
+  modal: {
+    alignItems: 'center',
+    padding: '1em',
+    width: '100%',
+    minHeight: '60vh',
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#FFFFFF',
+    border: '1px solid gray',
+  },
+
   contentContainer: {
     flexDirection: 'column',
     paddingTop: '0.5em',
@@ -42,8 +55,6 @@ const styles = {
     width: '50px',
   },
   commentInputContainer: {
-    // borderColor: 'blue',
-    // borderWidth: 1,
     backgroundColor: '#FFFFFF',
     width: '100%',
     flexDirection: 'row',
@@ -93,9 +104,7 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  postButton: {
-
-  },
+  postButton: {},
 };
 
 export default styles;
