@@ -1,13 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Board } from './Board';
+import { Member } from './Member';
 
 @Entity()
 export class Comment {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    writer!: string;
+    @OneToOne(type => Member)
+    @JoinColumn()
+    writer!: Member;
 
     @CreateDateColumn()
     regDate!: Date;
@@ -18,5 +20,4 @@ export class Comment {
     @OneToOne(type => Board)
     @JoinColumn()
     board!: Board;
-
 }

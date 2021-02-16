@@ -1,12 +1,12 @@
 import express from 'express';
-import RestController from './Controller/RestController';
-
+import RestController from './controller/RestController';
+import { Connection } from 'typeorm';
 class App {
     public application: express.Application;
 
-    constructor() {
+    constructor(connection: Connection) {
         this.application = express();
-        this.application.use('/rest', new RestController().router);
+        this.application.use('/rest', new RestController(connection).router);
         this.router();
     }
 

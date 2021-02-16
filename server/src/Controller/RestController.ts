@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express';
-
+import { Connection } from 'typeorm';
 // const RestController = express.Router();
 
 class RestController {
     public router: express.Router;
-    constructor() {
+    private connection : Connection;
+
+    constructor(connection: Connection) {
         this.router = express.Router();
+        this.connection = connection;
         this.routing();
     }
 

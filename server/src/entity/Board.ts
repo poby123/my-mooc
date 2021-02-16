@@ -1,13 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Category } from './Category';
+import { Member } from './Member';
 
 @Entity()
 export class Board {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    writer!: number;
+    @OneToOne(type => Member)
+    @JoinColumn()
+    writer!: Member;
 
     @CreateDateColumn({ type: 'datetime' })
     regDate!: Date;
@@ -24,7 +26,7 @@ export class Board {
     @Column({ default: 0 })
     favorite!: number;
 
-    @OneToOne(type=>Category)
+    @OneToOne(type => Category)
     @JoinColumn()
     category!: Category;
 }
