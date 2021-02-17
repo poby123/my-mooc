@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
 import { Board } from './Board';
 import { Member } from './Member';
 
@@ -7,8 +7,7 @@ export class Comment {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @OneToOne(type => Member)
-    @JoinColumn()
+    @ManyToOne(() => Member, writer => writer.comment)
     writer!: Member;
 
     @CreateDateColumn()
@@ -17,7 +16,6 @@ export class Comment {
     @Column()
     content!: string;
 
-    @OneToOne(type => Board)
-    @JoinColumn()
+    @ManyToOne(() => Board, board => board.comment)
     board!: Board;
 }

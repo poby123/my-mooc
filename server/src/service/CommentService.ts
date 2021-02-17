@@ -23,6 +23,10 @@ export class CommentService {
         return await this.commentRepository.find({ board: board });
     }
 
+    public async getByWriter(writer: Member) {
+        return await this.commentRepository.find({ writer: writer });
+    }
+
     public async delete(comment: Comment) {
         return await this.commentRepository.remove(comment);
     }

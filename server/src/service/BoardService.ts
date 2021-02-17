@@ -22,6 +22,10 @@ export class BoardService {
         return await this.boardRepository.save(board);
     }
 
+    public async getByWriter(writer: Member) {
+        return await this.boardRepository.find({ writer: writer });
+    }
+
     public async getById(id: number) {
         return await this.boardRepository.findOne(id);
     }

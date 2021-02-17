@@ -1,6 +1,7 @@
 import { Connection, Repository } from "typeorm";
 import { Category } from "../entity/Category";
 import { Organization } from "../entity/Organization";
+import { Member } from '../entity/Member';
 
 export class CategoryService {
     private categoryRepository: Repository<Category>;
@@ -9,12 +10,11 @@ export class CategoryService {
         this.categoryRepository = connection.getRepository(Category);
     }
 
-    public async add(organization: Organization, title: string, role?: JSON) {
+    public async add(organization: Organization, title: string, member?: Member[]) {
         let category = new Category();
         category.organization = organization;
         category.title = title;
-        role && (category.role = role);
-
+        category.member = member ? member : [];
         return await this.categoryRepository.save(category);
     }
 
