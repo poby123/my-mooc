@@ -24,3 +24,12 @@ client/.env.production.local
 */npm-debug.log*
 */yarn-debug.log*
 */yarn-error.log*
+
+
+# spring ignore
+spring-server/.settings
+spring-server/.project
+spring-server/.classpath
+spring-server/.springBeans
+
+spring-server/target
