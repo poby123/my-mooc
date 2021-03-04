@@ -31,14 +31,14 @@ public class Member {
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     // == 생성 메서드 == //
-    public static Member createMember(String id, String password, Organization organization){
+    public static Member createMember(String id, String password, Organization organization) {
         Member member = new Member();
         member.setId(id);
         member.setPassword(password);
@@ -47,5 +47,14 @@ public class Member {
         member.setOrganization(organization);
 
         return member;
+    }
+
+    // == 연관관계 메서드 == //
+    public void addBoard(Board board) {
+        this.boards.add(board);
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

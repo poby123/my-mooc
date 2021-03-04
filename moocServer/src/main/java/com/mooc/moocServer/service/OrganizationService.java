@@ -39,9 +39,9 @@ public class OrganizationService {
         return organizationRepository.findOne(id);
     }
 
-//    public List<Category> getCategories(String organizationId) {
-//        Organization organization = organizationRepository.findOne(organizationId);
-//        return organization.getCategories();
-//    }
+    public List<Category> getCategories(String organizationId) {
+        Organization organization = organizationRepository.findOne(organizationId);
+        return organization.getCategories();
+    }
 
 }

@@ -47,4 +47,9 @@ public class Board {
 
         return board;
     }
+
+    // == 연관관계 메서드 == //
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+    }
 }

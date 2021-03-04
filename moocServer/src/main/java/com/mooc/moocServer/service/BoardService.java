@@ -22,12 +22,16 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void addBoard(String memberId, Long categoryId, String content) {
-        Member memberOne = memberRepository.findOne(memberId);
-        Category categoryOne = categoryRepository.findOne(categoryId);
-        Board board = Board.createBoard(memberOne, categoryOne, content);
+    public Long addBoard(String memberId, Long categoryId, String content) {
+        Member member = memberRepository.findOne(memberId);
+        Category category = categoryRepository.findOne(categoryId);
+        Board board = Board.createBoard(member, category, content);
 
+        member.addBoard(board);
+        category.addBoard(board);
         boardRepository.save(board);
+
+        return board.getId();
     }
 
     public List<Board> getAllBoards() {
@@ -37,10 +41,5 @@ public class BoardService {
 
     public Board getBoard(Long id) {
         return boardRepository.findOne(id);
-    }
-
-    public List<Comment> getComments(Long boardId){
-        Board board = boardRepository.findOne(boardId);
-        return board.getComments();
     }
 }

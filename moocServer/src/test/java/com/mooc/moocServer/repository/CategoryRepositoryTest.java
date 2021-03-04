@@ -45,12 +45,10 @@ public class CategoryRepositoryTest {
 
         assertEquals("category save test", category, one);
 
-        organizationRepository.addCategory(organization.getId(), category);
+        organization.addCategory(category);
 
         List<Category> categories = organization.getCategories();
         System.out.println("The size is : " + categories.size());
-        categories.forEach(c -> {
-            System.out.println("The id is : " + c.getId());
-        });
+        categories.forEach(c -> System.out.println("The id is : " + c.getId()));
     }
 }

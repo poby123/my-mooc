@@ -23,26 +23,19 @@ public class CategoryService {
     public Long addCategory(String name, String organizationId) {
         Organization organization = organizationRepository.findOne(organizationId);
         Category category = Category.createCategory(name, organization);
+
         organization.addCategory(category);
         categoryRepository.save(category);
+
         return category.getId();
     }
 
-//    public List<Category> getAllCategories() {
-//        return categoryRepository.findAll();
-//    }
-//
 //    public List<Category> getCategories(Organization organization) {
 //        return categoryRepository.findByOrganization(organization);
 //    }
 
     public Category getCategory(Long id) {
         return categoryRepository.findOne(id);
-    }
-
-    public List<Board> getBoards(Long categoryId){
-        Category category = categoryRepository.findOne(categoryId);
-        return category.getBoards();
     }
 
 }

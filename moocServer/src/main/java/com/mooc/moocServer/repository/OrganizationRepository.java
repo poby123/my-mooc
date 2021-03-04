@@ -1,7 +1,5 @@
 package com.mooc.moocServer.repository;
 
-import com.mooc.moocServer.domain.Category;
-import com.mooc.moocServer.domain.Member;
 import com.mooc.moocServer.domain.Organization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,16 +19,6 @@ public class OrganizationRepository {
 
     public Organization findOne(String id) {
         return em.find(Organization.class, id);
-    }
-
-    public void addCategory(String organizationId, Category category) {
-        Organization organization = em.find(Organization.class, organizationId);
-        organization.addCategory(category);
-    }
-
-    public void addMember(String organizationId, Member member) {
-        Organization organization = em.find(Organization.class, organizationId);
-        organization.addMember(member);
     }
 
     public List<Organization> findAll() {
