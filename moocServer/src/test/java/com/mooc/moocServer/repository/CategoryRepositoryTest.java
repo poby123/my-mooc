@@ -1,9 +1,8 @@
 package com.mooc.moocServer.repository;
 
-import com.mooc.moocServer.domain.Category;
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Category;
+import com.mooc.moocServer.entity.Organization;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

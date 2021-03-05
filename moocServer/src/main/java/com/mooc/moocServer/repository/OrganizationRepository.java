@@ -1,6 +1,6 @@
 package com.mooc.moocServer.repository;
 
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Organization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

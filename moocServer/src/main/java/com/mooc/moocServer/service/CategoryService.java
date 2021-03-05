@@ -1,15 +1,12 @@
 package com.mooc.moocServer.service;
 
-import com.mooc.moocServer.domain.Board;
-import com.mooc.moocServer.domain.Category;
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Category;
+import com.mooc.moocServer.entity.Organization;
 import com.mooc.moocServer.repository.CategoryRepository;
 import com.mooc.moocServer.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

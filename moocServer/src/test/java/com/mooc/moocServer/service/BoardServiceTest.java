@@ -1,7 +1,6 @@
 package com.mooc.moocServer.service;
 
-import com.mooc.moocServer.domain.Board;
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Board;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

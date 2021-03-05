@@ -1,9 +1,8 @@
 package com.mooc.moocServer.service;
 
-import com.mooc.moocServer.domain.Board;
-import com.mooc.moocServer.domain.Category;
-import com.mooc.moocServer.domain.Comment;
-import com.mooc.moocServer.domain.Member;
+import com.mooc.moocServer.entity.Board;
+import com.mooc.moocServer.entity.Category;
+import com.mooc.moocServer.entity.Member;
 import com.mooc.moocServer.repository.BoardRepository;
 import com.mooc.moocServer.repository.CategoryRepository;
 import com.mooc.moocServer.repository.MemberRepository;

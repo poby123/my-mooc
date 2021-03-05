@@ -1,7 +1,7 @@
 package com.mooc.moocServer.service;
 
-import com.mooc.moocServer.domain.Member;
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Member;
+import com.mooc.moocServer.entity.Organization;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

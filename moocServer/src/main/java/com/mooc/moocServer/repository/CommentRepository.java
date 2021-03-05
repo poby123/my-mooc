@@ -1,6 +1,6 @@
 package com.mooc.moocServer.repository;
 
-import com.mooc.moocServer.domain.Comment;
+import com.mooc.moocServer.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package com.mooc.moocServer.service;
 
-import com.mooc.moocServer.domain.Category;
-import com.mooc.moocServer.domain.Organization;
+import com.mooc.moocServer.entity.Organization;
 import com.mooc.moocServer.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,6 @@ public class OrganizationService {
 
     public Organization getOrganization(String id) {
         return organizationRepository.findOne(id);
-    }
-
-    public List<Category> getCategories(String organizationId) {
-        Organization organization = organizationRepository.findOne(organizationId);
-        return organization.getCategories();
     }
 
 }

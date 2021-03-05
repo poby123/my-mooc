@@ -1,4 +1,4 @@
-package com.mooc.moocServer.domain;
+package com.mooc.moocServer.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

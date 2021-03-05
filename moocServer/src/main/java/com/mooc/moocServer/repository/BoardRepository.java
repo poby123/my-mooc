@@ -1,7 +1,6 @@
 package com.mooc.moocServer.repository;
 
-import com.mooc.moocServer.domain.Board;
-import com.mooc.moocServer.domain.Category;
+import com.mooc.moocServer.entity.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
