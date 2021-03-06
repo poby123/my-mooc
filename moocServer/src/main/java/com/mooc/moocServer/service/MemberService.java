@@ -24,6 +24,24 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    @Transactional
+    public void addMember(String id, String password) {
+        Member member = Member.createMember(id, password);
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void setOrganization(String id, String organizationId){
+        Member member = memberRepository.findOne(id);
+        Organization currentOrganization = member.getOrganization();
+        if(currentOrganization != null){
+            currentOrganization.getMembers().remove(member);
+        }
+        Organization o = organizationRepository.findOne(organizationId);
+        member.setOrganization(o);
+        o.addMember(member);
+    }
+
     public Member getMember(String memberId) {
         return memberRepository.findOne(memberId);
     }
