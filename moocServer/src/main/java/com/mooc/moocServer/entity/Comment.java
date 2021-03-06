@@ -1,5 +1,6 @@
 package com.mooc.moocServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @JsonBackReference("board-comment")
     private Board board;
 
     @Column(name = "comment_content")

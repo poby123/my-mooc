@@ -1,5 +1,7 @@
 package com.mooc.moocServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +31,11 @@ public class Member {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
+    @JsonBackReference("organization-member")
     private Organization organization;
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @JsonManagedReference("member-board")
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
@@ -49,7 +53,21 @@ public class Member {
         return member;
     }
 
+    public static Member createMember(String id, String password) {
+        Member member = new Member();
+        member.setId(id);
+        member.setPassword(password);
+        member.setImage("default image link");
+        member.setRole(MemberRole.NONE);
+
+        return member;
+    }
+
     // == 연관관계 메서드 == //
+    public void setOrganization(Organization organization){
+        this.organization = organization;
+    }
+
     public void addBoard(Board board) {
         this.boards.add(board);
     }

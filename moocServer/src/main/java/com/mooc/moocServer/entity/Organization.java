@@ -1,5 +1,6 @@
 package com.mooc.moocServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,9 +17,11 @@ public class Organization {
     private String id;
 
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @JsonManagedReference("organization-category")
     private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "organization")
+    @JsonManagedReference("organization-member")
     private List<Member> members = new ArrayList<>();
 
     public Organization(String id){
