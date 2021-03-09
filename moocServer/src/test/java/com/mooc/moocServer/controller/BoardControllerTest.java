@@ -37,15 +37,16 @@ public class BoardControllerTest {
 
     @Before
     public void setup() throws Exception {
-        addOrganization();
-        addMember();
-        addCategory();
-        setOrganization();
+        TestA_addOrganization();
+        TestB_addMember();
+        TestC_setOrganization();
+        TestD_addCategory();
     }
 
     @Test
     public void addBoard() throws Exception {
-        String content = objectMapper.writeValueAsString(new BoardDto("test-member-id", 1L, "test-board content"));
+
+        String content = objectMapper.writeValueAsString(new BoardDto.AddRequest("test-member-id", 1L, "test-board content"));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board")
                 .content(content)
@@ -56,12 +57,9 @@ public class BoardControllerTest {
                 .andReturn();
 
         String resultString = result.getResponse().getContentAsString();
-        BoardDto boardDto = objectMapper.readValue(resultString, BoardDto.class);
-        assertEquals("글쓴이를 확인합니다.", "test-member-id", boardDto.getWriterId());
-        assertEquals("카테고리 아이디를 확인합니다.", "1", String.valueOf(boardDto.getCategoryId()));
-        assertEquals("글 내용을 확인합니다.", "test-board content", boardDto.getContent());
-
-        getCategory();
+        BoardDto.Response res = objectMapper.readValue(resultString, BoardDto.Response.class);
+        assertEquals("글쓴이를 확인합니다.", "test-member-id", res.getWriter().getId());
+        assertEquals("글 내용을 확인합니다.", "test-board content", res.getContent());
     }
 
     @Test
@@ -72,37 +70,62 @@ public class BoardControllerTest {
     public void getBoards() {
     }
 
-    public void getCategory() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category/1")
-                .contentType(MediaType.APPLICATION_JSON)
+    /*
+     * Add
+     * */
+    @Test
+    public void TestA_addOrganization() throws Exception {
+        String content = objectMapper.writeValueAsString(new OrganizationDto.Request("test-organization-id"));
+        log.info(content);
+        mockMvc.perform(MockMvcRequestBuilders.post("/organization")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void TestB_addMember() throws Exception {
+        MemberDto.SignupRequest dto = new MemberDto.SignupRequest("test-member-id", "test-password");
+        String member = objectMapper.writeValueAsString(dto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/member")
+                .content(member)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void TestC_setOrganization() throws Exception {
+        // member 확인
+        MvcResult mResult = mockMvc.perform(MockMvcRequestBuilders.put(
+                "/member?member=test-member-id&organization=test-organization-id")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
-        String resultString = result.getResponse().getContentAsString();
-        CategoryDto categoryDto = objectMapper.readValue(resultString, CategoryDto.class);
-        assertEquals("카테고리 이름을 확인합니다.", "test-category-name", categoryDto.getName());
-        assertEquals("카테고리 조직을 확인합니다.", "test-organization-id", categoryDto.getOrganizationId());
+        String mContent = mResult.getResponse().getContentAsString();
+        MemberDto.Response res = objectMapper.readValue(mContent, MemberDto.Response.class);
+        assertEquals("멤버의 조직을 확인합니다.", "test-organization-id", res.getOrganization().getId());
+
+
+        // organization 확인
+//        MvcResult orResult = mockMvc.perform(MockMvcRequestBuilders.get("/organization" + "/test-organization")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
+//
+//        String orContent = orResult.getResponse().getContentAsString();
+//        OrganizationDto.Info orDto = objectMapper.readValue(orContent, OrganizationDto.Info.class);
+//        assertEquals("조직의 멤버를 확인합니다.", "test-member-id", orDto.getMembers().get(0).getId());
     }
 
-    /*
-     * Add
-     * */
-    @Test
-    public void addOrganization() throws Exception {
-        String content = objectMapper.writeValueAsString(new OrganizationDto("test-organization-id"));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/organization")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    public void addCategory() throws Exception {
-        String content = objectMapper.writeValueAsString(new CategoryDto("test-category-name", "test-organization-id"));
+    public void TestD_addCategory() throws Exception {
+        String content = objectMapper.writeValueAsString(new CategoryDto.AddRequest("test-category-name", "test-organization-id"));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/category")
                 .content(content)
@@ -113,46 +136,9 @@ public class BoardControllerTest {
                 .andReturn();
 
         String resultString = result.getResponse().getContentAsString();
-        CategoryDto categoryDto = objectMapper.readValue(resultString, CategoryDto.class);
-        assertEquals("카테고리 이름을 확인합니다.", "test-category-name", categoryDto.getName());
-        assertEquals("카테고리 조직을 확인합니다.", "test-organization-id", categoryDto.getOrganizationId());
+        CategoryDto.Response res = objectMapper.readValue(resultString, CategoryDto.Response.class);
+        log.info("카테고리 아이디 : " + res.getId());
+        assertEquals("카테고리 이름을 확인합니다.", "test-category-name", res.getName());
     }
 
-    @Test
-    public void addMember() throws Exception {
-        MemberDto dto = MemberDto.builder().id("test-member-id").password("test-password").build();
-        String member = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/member")
-                .content(member)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    public void setOrganization() throws Exception {
-        // member 확인
-        MvcResult mResult = mockMvc.perform(MockMvcRequestBuilders.put(
-                "/member?member=test-member-id&organization=test-organization-id")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-
-        String mContent = mResult.getResponse().getContentAsString();
-        MemberDto mDto = objectMapper.readValue(mContent, MemberDto.class);
-        assertEquals("멤버의 조직을 확인합니다.", "test-organization-id", mDto.getOrganizationId());
-
-        // organization 확인
-        MvcResult orResult = mockMvc.perform(MockMvcRequestBuilders.get("/organization" + "/test-organization-id")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-
-        String orContent = orResult.getResponse().getContentAsString();
-        OrganizationDto orDto = objectMapper.readValue(orContent, OrganizationDto.class);
-        assertEquals("조직의 멤버를 확인합니다.", "test-member-id", orDto.getMembers().get(0).getId());
-    }
 }

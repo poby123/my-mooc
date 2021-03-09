@@ -1,6 +1,8 @@
 package com.mooc.moocServer.repository;
 
+import com.mooc.moocServer.dto.OrganizationDto;
 import com.mooc.moocServer.entity.Organization;
+import com.mooc.moocServer.mapper.OrganizationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +25,7 @@ public class OrganizationRepository {
 
     public List<Organization> findAll() {
         return em.createQuery("select o from Organization o", Organization.class).getResultList();
+
     }
 
     public List<Organization> findById(String id) {

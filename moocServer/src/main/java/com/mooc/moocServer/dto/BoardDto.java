@@ -1,6 +1,5 @@
 package com.mooc.moocServer.dto;
 
-import com.mooc.moocServer.entity.Board;
 import com.mooc.moocServer.entity.Category;
 import com.mooc.moocServer.entity.Comment;
 import com.mooc.moocServer.entity.Member;
@@ -47,9 +46,11 @@ public class BoardDto {
     @Getter
     @Setter
     public static class Response {
-        private Info info;
-        private String returnCode;
-        private String returnMessage;
+        private Long id;
+        private MemberDto.SimpleResponse writer;
+        private String content;
+        private Long good;
+        private List<Comment> commentList;
     }
 
 

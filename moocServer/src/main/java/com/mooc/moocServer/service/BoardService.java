@@ -1,11 +1,14 @@
 package com.mooc.moocServer.service;
 
+import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.entity.Board;
 import com.mooc.moocServer.entity.Category;
 import com.mooc.moocServer.entity.Member;
+import com.mooc.moocServer.mapper.BoardMapper;
 import com.mooc.moocServer.repository.BoardRepository;
 import com.mooc.moocServer.repository.CategoryRepository;
 import com.mooc.moocServer.repository.MemberRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +22,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
+    private BoardMapper boardMapper = new BoardMapper();
 
     @Transactional
-    public Long addBoard(String memberId, Long categoryId, String content) {
+    public BoardDto.Response addBoard(String memberId, Long categoryId, String content) {
         Member member = memberRepository.findOne(memberId);
         Category category = categoryRepository.findOne(categoryId);
         Board board = Board.createBoard(member, category, content);
@@ -30,15 +34,18 @@ public class BoardService {
         category.addBoard(board);
         boardRepository.save(board);
 
-        return board.getId();
+        return boardMapper.boardToBoardResponse(board);
     }
 
-    public List<Board> getAllBoards() {
-        return boardRepository.findAll();
+    public List<BoardDto.Response> getBoards(@NonNull Long categoryId){
+        Category category = categoryRepository.findOne(categoryId);
+        List<Board> boards = category.getBoards();
+
+        return boardMapper.boardToBoardResponseList(boards);
     }
 
-
-    public Board getBoard(Long id) {
-        return boardRepository.findOne(id);
+    public BoardDto.Response getBoard(Long id) {
+        Board board = boardRepository.findOne(id);
+        return boardMapper.boardToBoardResponse(board);
     }
 }

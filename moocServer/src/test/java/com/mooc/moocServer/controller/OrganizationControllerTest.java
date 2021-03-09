@@ -2,14 +2,13 @@ package com.mooc.moocServer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mooc.moocServer.dto.OrganizationDto;
-import com.mooc.moocServer.entity.Organization;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -32,9 +31,9 @@ public class OrganizationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+    @Before
     public void add() throws Exception {
-        String content = objectMapper.writeValueAsString(new OrganizationDto("test-organization-id"));
+        String content = objectMapper.writeValueAsString(new OrganizationDto.Request("test-organization-id"));
         log.info(content);
         mockMvc.perform(MockMvcRequestBuilders.post("/organization")
                 .content(content)

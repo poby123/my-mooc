@@ -59,7 +59,7 @@ public class MemberDto {
     @Builder
     @Getter
     @Setter
-    public static class MemberResponse{
+    public static class Response {
         private String id;
         private String image;
         private Organization organization;
@@ -73,10 +73,9 @@ public class MemberDto {
     @Builder
     @Getter
     @Setter
-    public static class MemberSimpleResponse {
+    public static class SimpleResponse {
         private String id;
         private String image;
-        private Organization organization;
         private MemberRole role;
     }
 

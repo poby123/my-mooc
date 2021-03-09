@@ -1,6 +1,7 @@
 package com.mooc.moocServer.controller;
 
 import com.mooc.moocServer.dto.CategoryDto;
+import com.mooc.moocServer.dto.OrganizationDto;
 import com.mooc.moocServer.entity.Category;
 import com.mooc.moocServer.entity.Organization;
 import com.mooc.moocServer.service.CategoryService;
@@ -24,34 +25,20 @@ public class CategoryController {
     private final OrganizationService organizationService;
 
     @GetMapping("/category")
-    public List<CategoryDto> getCategories(@RequestParam("organization") String organizationId) {
-        Organization organization = organizationService.getOrganization(organizationId);
-        List<Category> categories = organization.getCategories();
-        List<CategoryDto> categoryDtos = new ArrayList<>(categories.size());
-        for (Category c : categories) {
-            CategoryDto dto = CategoryDto.entityToDto(c);
-            categoryDtos.add(dto);
-        }
-        return categoryDtos;
+    public ResponseEntity<?> getCategories(@RequestParam("organization") String organizationId) {
+        List<CategoryDto.Response> res = categoryService.getCategories(organizationId);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @GetMapping("/category/{categoryId}")
-    public CategoryDto getCategory(@PathVariable("categoryId") Long categoryId) {
-        Category category = categoryService.getCategory(categoryId);
-        return CategoryDto.entityToDto(category);
+    public ResponseEntity<?> getCategory(@PathVariable("categoryId") Long categoryId) {
+        CategoryDto.Response res = categoryService.getCategory(categoryId);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @PostMapping(value = "/category", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addCategory(@RequestBody CategoryDto dto) {
-        Long categoryId = categoryService.addCategory(dto.getName(), dto.getOrganizationId());
-//        Long categoryId = categoryService.addCategory(m.get("name"), m.get("organizationId"));
-        Category category = categoryService.getCategory(categoryId);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(CategoryDto.entityToDto(category));
+    public ResponseEntity<?> addCategory(@RequestBody CategoryDto.AddRequest req) {
+        CategoryDto.Response res = categoryService.addCategory(req.getName(), req.getOrganizationId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
-
-//    @DeleteMapping("/category/{categoryId}")
-//    public CategoryDto deleteCategory(@PathVariable Long categoryId){
-//
-//    }
 }

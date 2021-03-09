@@ -21,6 +21,16 @@ public class OrganizationDto {
 
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class Response {
+        private String id;
+        private List<Category> categories;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Getter
     @Setter
     public static class Request {

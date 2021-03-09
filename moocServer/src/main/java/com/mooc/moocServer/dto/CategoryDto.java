@@ -41,9 +41,9 @@ public class CategoryDto {
     @Getter
     @Setter
     public static class Response {
-        private Info info;
-        private String returnCode;
-        private String returnMessage;
+        private Long id;
+        private String name;
+        private List<Board> boards;
     }
 
 }
