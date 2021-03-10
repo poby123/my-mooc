@@ -40,6 +40,7 @@ public class Member {
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @JsonManagedReference("member-comment")
     private List<Comment> comments = new ArrayList<>();
 
     // == 생성 메서드 == //

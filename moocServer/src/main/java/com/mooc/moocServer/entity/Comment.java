@@ -18,6 +18,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @JsonBackReference("member-comment")
     private Member writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
