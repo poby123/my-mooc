@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class OrganizationService {
     private final OrganizationRepository organizationRepository;
-    private final OrganizationMapper om = new OrganizationMapper();
+    private final OrganizationMapper organizationMapper;
 
     @Transactional
     public OrganizationDto.Response addOrganization(String requestId) {
@@ -24,16 +24,16 @@ public class OrganizationService {
         validateDuplicateOrganization(organization);
         organizationRepository.save(organization);
 
-        return om.organizationToResponseDto(organization);
+        return organizationMapper.organizationToResponseDto(organization);
     }
 
     public List<OrganizationDto.Response> getAllOrganizations() {
-        return om.organizationListToResponseDtoList(organizationRepository.findAll());
+        return organizationMapper.organizationListToResponseDtoList(organizationRepository.findAll());
     }
 
     public OrganizationDto.Response getOrganization(@NonNull String organizationId) {
         Organization o = organizationRepository.findOne(organizationId);
-        return om.organizationToResponseDto(o);
+        return organizationMapper.organizationToResponseDto(o);
     }
 
     // utility

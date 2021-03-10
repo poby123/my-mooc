@@ -2,10 +2,12 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.OrganizationDto;
 import com.mooc.moocServer.entity.Organization;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class OrganizationMapper{
 
     // Organization -> Dto.Info

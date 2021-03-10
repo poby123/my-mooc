@@ -2,10 +2,12 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.entity.Member;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class MemberMapper {
 
     // Member -> MemberSimpleResponse

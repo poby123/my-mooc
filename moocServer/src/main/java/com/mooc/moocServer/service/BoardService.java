@@ -22,7 +22,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
-    private BoardMapper boardMapper = new BoardMapper();
+    private final BoardMapper boardMapper;
 
     @Transactional
     public BoardDto.Response addBoard(String memberId, Long categoryId, String content) {

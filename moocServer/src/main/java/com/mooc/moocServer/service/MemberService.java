@@ -20,7 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final OrganizationRepository organizationRepository;
-    private final MemberMapper memberMapper = new MemberMapper();
+    private final MemberMapper memberMapper;
 
     @Transactional
     public MemberDto.SimpleResponse addMember(String id, String password) {

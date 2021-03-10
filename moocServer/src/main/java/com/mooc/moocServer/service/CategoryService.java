@@ -20,7 +20,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final OrganizationRepository organizationRepository;
-    private CategoryMapper categoryMapper = new CategoryMapper();
+    private final CategoryMapper categoryMapper;
 
     @Transactional
     public CategoryDto.Response addCategory(String name, String organizationId) {

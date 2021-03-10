@@ -2,10 +2,12 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.entity.Board;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class BoardMapper {
 
     private MemberMapper memberMapper = new MemberMapper();

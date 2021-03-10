@@ -2,11 +2,12 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.CategoryDto;
 import com.mooc.moocServer.entity.Category;
-import lombok.NonNull;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CategoryMapper {
 
     // Category -> Dto.Response
