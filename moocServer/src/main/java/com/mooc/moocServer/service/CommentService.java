@@ -1,8 +1,10 @@
 package com.mooc.moocServer.service;
 
+import com.mooc.moocServer.dto.CommentDto;
 import com.mooc.moocServer.entity.Board;
 import com.mooc.moocServer.entity.Comment;
 import com.mooc.moocServer.entity.Member;
+import com.mooc.moocServer.mapper.CommentMapper;
 import com.mooc.moocServer.repository.BoardRepository;
 import com.mooc.moocServer.repository.CommentRepository;
 import com.mooc.moocServer.repository.MemberRepository;
@@ -19,25 +21,29 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final CommentMapper commentMapper;
 
     @Transactional
-    public Long addComment(String memberId, Long boardId, String content) {
-        Member writer = memberRepository.findOne(memberId);
-        Board board = boardRepository.findOne(boardId);
-        Comment comment = Comment.createComment(writer, board, content);
+    public CommentDto.Response addComment(CommentDto.AddRequest request) {
+        Member writer = memberRepository.findOne(request.getWriterId());
+        Board board = boardRepository.findOne(request.getBoardId());
+        Comment comment = Comment.createComment(writer, board, request.getContent());
 
         writer.addComment(comment);
         board.addComment(comment);
         commentRepository.save(comment);
 
-        return comment.getId();
+        return commentMapper.commentToCommentResponse(comment);
     }
 
-    public Comment getComment(Long id){
-        return commentRepository.findOne(id);
+    public CommentDto.Response getComment(Long id){
+        Comment comment = commentRepository.findOne(id);
+        return commentMapper.commentToCommentResponse(comment);
     }
 
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
+    public List<CommentDto.Response> getComments(Long boardId) {
+        Board board = boardRepository.findOne(boardId);
+        List<Comment> comments = board.getComments();
+        return commentMapper.commentListToResponseDtoList(comments);
     }
 }

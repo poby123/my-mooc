@@ -42,8 +42,9 @@ public class CommentDto {
     @Getter
     @Setter
     public static class Response {
-        private Info info;
-        private String returnCode;
-        private String returnMessage;
+        private Long id;
+        private Long boardId;
+        private MemberDto.SimpleResponse writer;
+        private String content;
     }
 }
