@@ -27,6 +27,7 @@ public class OrganizationDto {
     public static class Response {
         private String id;
         private List<Category> categories;
+        private List<MemberDto.SimpleResponse> members;
     }
 
     @NoArgsConstructor

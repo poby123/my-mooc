@@ -1,14 +1,18 @@
 package com.mooc.moocServer.mapper;
 
+import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.dto.OrganizationDto;
 import com.mooc.moocServer.entity.Organization;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class OrganizationMapper{
+    private final MemberMapper memberMapper;
 
     // Organization -> Dto.Info
     public OrganizationDto.Info organizationToInfoDto(Organization o) {
@@ -17,7 +21,8 @@ public class OrganizationMapper{
 
     // Organization -> Dto.Response
     public OrganizationDto.Response organizationToResponseDto(Organization o){
-        return new OrganizationDto.Response(o.getId(), o.getCategories());
+        List<MemberDto.SimpleResponse> members = memberMapper.memberListToMemberSimpleResponseList(o.getMembers());
+        return new OrganizationDto.Response(o.getId(), o.getCategories(), members);
     }
 
     // List<Organization> -> List<Dto.Info>

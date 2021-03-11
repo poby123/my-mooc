@@ -5,10 +5,8 @@ import com.mooc.moocServer.dto.CategoryDto;
 import com.mooc.moocServer.dto.OrganizationDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -36,55 +33,40 @@ public class CategoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public void TestA_addOrganization() throws Exception {
-        String content = objectMapper.writeValueAsString(new OrganizationDto.Request("test-organization-id"));
-        log.info(content);
-        mockMvc.perform(MockMvcRequestBuilders.post("/organization")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andDo(MockMvcResultHandlers.print());
+    @Before
+    public void setup() throws Exception {
+        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
     }
 
     @Test
-    public void TestB_addCategory() throws Exception {
-        String content = objectMapper.writeValueAsString(new CategoryDto.AddRequest("test-category-name", "test-organization-id"));
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/category")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-
-        String resultString = result.getResponse().getContentAsString();
-        CategoryDto.Response res = objectMapper.readValue(resultString, CategoryDto.Response.class);
+    public void addCategory() throws Exception {
+        // 카테고리 추가. 확인
+        CategoryDto.Response res = ControllerTestUtility.addCategory(mockMvc, objectMapper);
         log.info("카테고리 아이디 : " + res.getId());
         assertEquals("카테고리 이름을 확인합니다.", "test-category-name", res.getName());
+
+        // 조직에서 카테고리 확인
+        OrganizationDto.Response organization = ControllerTestUtility.getOrganization(mockMvc, objectMapper);
+        assertEquals("조직에서 카테고리를 확인합니다.", "test-category-name", organization.getCategories().get(0).getName());
     }
 
     @Test
-    public void TestC_getCategory() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
+    public void getCategory() throws Exception {
+        // 카테고리 추가
+        CategoryDto.Response addRes = ControllerTestUtility.addCategory(mockMvc, objectMapper);
+        Long id = addRes.getId();
 
-        String resultString = result.getResponse().getContentAsString();
-        CategoryDto.Response res = objectMapper.readValue(resultString, CategoryDto.Response.class);
+        // 확인
+        CategoryDto.Response res = ControllerTestUtility.getCategory(mockMvc, objectMapper, String.valueOf(id));
         assertEquals("카테고리 이름을 확인합니다.", "test-category-name", res.getName());
     }
 
     @Test
-    public void TestD_getCategories() throws Exception {
-        TestA_addOrganization();
-        TestB_addCategory();
+    public void getCategories() throws Exception {
+        ControllerTestUtility.addCategory(mockMvc, objectMapper, "category-name-1");
+        ControllerTestUtility.addCategory(mockMvc, objectMapper, "category-name-2");
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category?organization=test-organization-id")
-                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -93,8 +75,8 @@ public class CategoryControllerTest {
         String resultString = result.getResponse().getContentAsString();
         List<CategoryDto.Response> res = objectMapper.readValue(resultString,
                 objectMapper.getTypeFactory().constructCollectionType(List.class, CategoryDto.Response.class));
-        for (CategoryDto.Response dto : res) {
-            assertEquals("카테고리 이름을 확인합니다.", "test-category-name", dto.getName());
-        }
+
+        assertEquals("카테고리 이름을 확인합니다.", "category-name-1", res.get(0).getName());
+        assertEquals("카테고리 이름을 확인합니다.", "category-name-2", res.get(1).getName());
     }
 }

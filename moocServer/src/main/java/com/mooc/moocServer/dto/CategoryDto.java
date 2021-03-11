@@ -43,7 +43,7 @@ public class CategoryDto {
     public static class Response {
         private Long id;
         private String name;
-        private List<Board> boards;
+        private List<BoardDto.Response> boards;
     }
 
 }

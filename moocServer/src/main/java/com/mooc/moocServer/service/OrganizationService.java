@@ -28,11 +28,18 @@ public class OrganizationService {
     }
 
     public List<OrganizationDto.Response> getAllOrganizations() {
-        return organizationMapper.organizationListToResponseDtoList(organizationRepository.findAll());
+        List<Organization> all = organizationRepository.findAll();
+        if(all == null){
+            throw new NullPointerException("조직이 존재하지 않습니다.");
+        }
+        return organizationMapper.organizationListToResponseDtoList(all);
     }
 
     public OrganizationDto.Response getOrganization(@NonNull String organizationId) {
         Organization o = organizationRepository.findOne(organizationId);
+        if(o == null){
+            throw new NullPointerException("찾으시는 " + organizationId + "가 존재하지 않습니다.");
+        }
         return organizationMapper.organizationToResponseDto(o);
     }
 

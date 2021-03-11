@@ -51,6 +51,6 @@ public class MemberService {
     public List<MemberDto.SimpleResponse> getMemberList(@NonNull String organizationId) {
         Organization o = organizationRepository.findOne(organizationId);
         List<Member> members = o.getMembers();
-        return memberMapper.memberListToMemberListResponse(members);
+        return memberMapper.memberListToMemberSimpleResponseList(members);
     }
 }

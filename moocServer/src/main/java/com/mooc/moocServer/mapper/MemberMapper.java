@@ -36,7 +36,7 @@ public class MemberMapper {
     }
 
     // List<Member> -> List<MemberSimpleResponse>
-    public List<MemberDto.SimpleResponse> memberListToMemberListResponse(List<Member> memberList){
+    public List<MemberDto.SimpleResponse> memberListToMemberSimpleResponseList(List<Member> memberList){
         List<MemberDto.SimpleResponse> retList = new ArrayList<>(memberList.size());
 
         for(Member m : memberList){
@@ -45,4 +45,6 @@ public class MemberMapper {
 
         return retList;
     }
+
+
 }
