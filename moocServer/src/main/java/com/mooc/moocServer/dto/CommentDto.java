@@ -5,6 +5,8 @@ import com.mooc.moocServer.entity.Comment;
 import com.mooc.moocServer.entity.Member;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 public class CommentDto {
 
     @NoArgsConstructor
@@ -32,8 +34,13 @@ public class CommentDto {
     @Getter
     @Setter
     public static class AddRequest {
+        @NotNull
         private String writerId;
+
+        @NotNull
         private Long boardId;
+
+        @NotNull
         private String content;
     }
 

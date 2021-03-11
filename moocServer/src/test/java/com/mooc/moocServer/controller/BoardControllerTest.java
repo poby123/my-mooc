@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.dto.CategoryDto;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ public class BoardControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Before
     public void setup() throws Exception {
         ControllerTestUtility.addOrganization(mockMvc, objectMapper);
         ControllerTestUtility.addMember(mockMvc, objectMapper);
@@ -44,6 +42,8 @@ public class BoardControllerTest {
 
     @Test
     public void addBoard() throws Exception {
+        setup();
+
         // 글 확인
         BoardDto.Response res = ControllerTestUtility.addBoard(mockMvc, objectMapper, "test-member-id", 1L, "test-board content");
         assertEquals("글쓴이를 확인합니다.", "test-member-id", res.getWriter().getId());
@@ -57,6 +57,7 @@ public class BoardControllerTest {
 
     @Test
     public void getBoard() throws Exception {
+        setup();
         BoardDto.Response response = ControllerTestUtility.addBoard(mockMvc, objectMapper, "test-member-id", 1L, "test-board content");
         Long originalId = response.getId();
 
@@ -68,6 +69,7 @@ public class BoardControllerTest {
 
     @Test
     public void getBoards() throws Exception {
+        setup();
         ControllerTestUtility.addBoard(mockMvc, objectMapper, "test-member-id", 1L, "test-board content1");
         ControllerTestUtility.addBoard(mockMvc, objectMapper, "test-member-id", 1L, "test-board content2");
 
@@ -85,6 +87,36 @@ public class BoardControllerTest {
 
         assertEquals("글 내용을 확인합니다.", "test-board content1", res.get(0).getContent());
         assertEquals("글 내용을 확인합니다.", "test-board content2", res.get(1).getContent());
+    }
+
+    @Test
+    public void 글추가시널값테스트() throws Exception{
+        String reqString = objectMapper.writeValueAsString(new BoardDto.AddRequest(null, null, null));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/board")
+                .content(reqString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 글조회시존재하지않은카테고리테스트() throws Exception{
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board?category=1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 글조회시존재하지않는글테스트() throws Exception{
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/board/0")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 
 }

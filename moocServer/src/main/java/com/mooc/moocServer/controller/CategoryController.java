@@ -1,9 +1,6 @@
 package com.mooc.moocServer.controller;
 
 import com.mooc.moocServer.dto.CategoryDto;
-import com.mooc.moocServer.dto.OrganizationDto;
-import com.mooc.moocServer.entity.Category;
-import com.mooc.moocServer.entity.Organization;
 import com.mooc.moocServer.service.CategoryService;
 import com.mooc.moocServer.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

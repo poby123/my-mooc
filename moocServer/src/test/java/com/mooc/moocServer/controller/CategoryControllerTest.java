@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mooc.moocServer.dto.CategoryDto;
 import com.mooc.moocServer.dto.OrganizationDto;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +32,15 @@ public class CategoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Before
-    public void setup() throws Exception {
-        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
-    }
+//    public void setup() throws Exception {
+//        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
+//    }
 
     @Test
     public void addCategory() throws Exception {
+        // 조직 추가
+        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
+
         // 카테고리 추가. 확인
         CategoryDto.Response res = ControllerTestUtility.addCategory(mockMvc, objectMapper);
         log.info("카테고리 아이디 : " + res.getId());
@@ -52,6 +53,9 @@ public class CategoryControllerTest {
 
     @Test
     public void getCategory() throws Exception {
+        // 조직 추가
+        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
+
         // 카테고리 추가
         CategoryDto.Response addRes = ControllerTestUtility.addCategory(mockMvc, objectMapper);
         Long id = addRes.getId();
@@ -63,6 +67,10 @@ public class CategoryControllerTest {
 
     @Test
     public void getCategories() throws Exception {
+        // 조직 추가
+        ControllerTestUtility.addOrganization(mockMvc, objectMapper);
+
+        // 카테고리 추가
         ControllerTestUtility.addCategory(mockMvc, objectMapper, "category-name-1");
         ControllerTestUtility.addCategory(mockMvc, objectMapper, "category-name-2");
 
@@ -78,5 +86,38 @@ public class CategoryControllerTest {
 
         assertEquals("카테고리 이름을 확인합니다.", "category-name-1", res.get(0).getName());
         assertEquals("카테고리 이름을 확인합니다.", "category-name-2", res.get(1).getName());
+    }
+
+    @Test
+    public void 추가하는데조직이없는경우() throws Exception {
+        String name = "test-category-name";
+        String content = objectMapper.writeValueAsString(new CategoryDto.AddRequest(name, "test-organization-id"));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/category")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 찾는카테고리가없는경우() throws Exception{
+        // 카테고리 조회
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category/2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 전체카테고리를조회할때조직이없는경우() throws Exception{
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category?organization=test-organization-id")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 }

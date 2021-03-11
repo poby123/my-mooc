@@ -2,10 +2,7 @@ package com.mooc.moocServer.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ public class Category {
     private Organization organization;
 
     // == 생성 메서드 == //
-    public static Category createCategory(String name, Organization organization) {
+    public static Category createCategory(@NonNull String name, @NonNull Organization organization) {
         Category category = new Category();
         category.setName(name);
         category.setOrganization(organization);

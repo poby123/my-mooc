@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.dto.OrganizationDto;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,7 +35,6 @@ public class MemberControllerTest {
 
     private String organizationId;
 
-    @Before
     public void setup() throws Exception {
         OrganizationDto.Response response = ControllerTestUtility.addOrganization(mockMvc, objectMapper);
         organizationId = response.getId();
@@ -50,10 +48,11 @@ public class MemberControllerTest {
 
     @Test
     public void setOrganization() throws Exception {
+        setup();
         addMember();
 
         // member 수정 및 확인
-        MemberDto.Response res = ControllerTestUtility.setMemberOrganization(mockMvc, objectMapper, "test-member-id","test-organization-id");
+        MemberDto.Response res = ControllerTestUtility.setMemberOrganization(mockMvc, objectMapper, "test-member-id", "test-organization-id");
         assertEquals("멤버의 조직을 확인합니다.", "test-organization-id", res.getOrganization().getId());
 
         // organization 확인
@@ -88,5 +87,51 @@ public class MemberControllerTest {
         addMember();
         MemberDto.Response res = ControllerTestUtility.getMember(mockMvc, objectMapper);
         assertEquals(res.getId(), "test-member-id");
+    }
+
+    @Test
+    public void 멤버추가시널값테스트() throws Exception {
+        MemberDto.SignupRequest dto = new MemberDto.SignupRequest(null, null);
+        String member = objectMapper.writeValueAsString(dto);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/member")
+                .content(member)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 멤버수정시존재하지않는조직으로테스트() throws Exception {
+        addMember();
+
+        MvcResult mResult = mockMvc.perform(MockMvcRequestBuilders.put(
+                "/member?member=test-member-id&organization=" + organizationId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 조회시존재하지않는멤버() throws Exception {
+        MvcResult mResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                "/member/0")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 전체멤버조회시시존재하지않은조직인경우() throws Exception {
+        MvcResult mResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                "/member?organization=anything")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 }

@@ -33,7 +33,6 @@ public class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Before
     public void setup() throws Exception {
         ControllerTestUtility.addOrganization(mockMvc, objectMapper);
         ControllerTestUtility.addMember(mockMvc, objectMapper);
@@ -44,6 +43,7 @@ public class CommentControllerTest {
 
     @Test
     public void addComment() throws Exception {
+        setup();
         CommentDto.Response res = ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content");
 
         assertEquals("글쓴이를 확인합니다.", "test-member-id", res.getWriter().getId());
@@ -52,6 +52,7 @@ public class CommentControllerTest {
 
     @Test
     public void getComment() throws Exception {
+        setup();
         // 댓글 추가
         ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content");
         ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content");
@@ -73,5 +74,27 @@ public class CommentControllerTest {
             assertEquals("글 내용을 확인합니다.", "comment-content", cd.getContent());
             assertEquals("댓글의 보드 아이디를 확인합니다.","2", String.valueOf(cd.getBoardId()));
         }
+    }
+
+    @Test
+    public void 댓글추가시존재하지않는멤버혹은글테스트() throws Exception{
+        String content = objectMapper.writeValueAsString(new CommentDto.AddRequest("test-member-id", 2L, "comment-content"));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/comment")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void 댓글목록조회시존재하지않는게시물테스트() throws Exception{
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/comment?board=2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 }
