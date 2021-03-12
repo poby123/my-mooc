@@ -33,4 +33,10 @@ public class GlobalControllerExceptionHandler {
     public ResponseEntity<ErrorDto> handleBadRequest(HttpServletRequest req, Exception ex){
         return new ResponseEntity<>(new ErrorDto(req.getRequestURL().toString(), ex), resHeaders, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    @ResponseBody()
+    public ResponseEntity<ErrorDto> handleBadAccess(HttpServletRequest req, Exception ex){
+        return new ResponseEntity<>(new ErrorDto(req.getRequestURL().toString(), ex), resHeaders, HttpStatus.BAD_REQUEST);
+    }
 }

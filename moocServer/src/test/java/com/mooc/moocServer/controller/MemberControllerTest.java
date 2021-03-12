@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,6 +46,49 @@ public class MemberControllerTest {
     public void addMember() throws Exception {
         MemberDto.Response response = ControllerTestUtility.addMember(mockMvc, objectMapper);
         assertEquals("추가한 멤버의 아이디를 확인합니다.", "test-member-id", response.getId());
+    }
+
+    @Test
+    public void 로그인테스트() throws Exception{
+        addMember();
+        MemberDto.SignInResponse res1 = ControllerTestUtility.signin(mockMvc, objectMapper, "test-member-id", "test-password", MockMvcResultMatchers.status().isOk());
+        log.info(res1.getResult());
+        MemberDto.SignInResponse res2 = ControllerTestUtility.signin(mockMvc, objectMapper, "test-member-id", "test&password", MockMvcResultMatchers.status().isBadRequest());
+        log.info(res2.getResult());
+    }
+
+    @Test
+    public void 정상적인토큰권한확인() throws Exception{
+        addMember();
+        MemberDto.SignInResponse res1 = ControllerTestUtility.signin(mockMvc, objectMapper, "test-member-id", "test-password", MockMvcResultMatchers.status().isOk());
+        String jwtToken = res1.getResult();
+
+        String content = objectMapper.writeValueAsString(new OrganizationDto.Request("test-organization-id"));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/organization")
+                .header("X-AUTH-TOKEN", jwtToken)
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        String resultString = result.getResponse().getContentAsString();
+        OrganizationDto.Response response = objectMapper.readValue(resultString, OrganizationDto.Response.class);
+        assertEquals("test-organization-id", response.getId());
+    }
+
+    @Test
+    public void 비정상적인토큰권한확인() throws Exception{
+        String content = objectMapper.writeValueAsString(new OrganizationDto.Request("test-organization-id"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/organization")
+                .header("X-AUTH-TOKEN", "thisiswrongjwttoken!!")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 
     @Test

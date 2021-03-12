@@ -20,7 +20,7 @@ public class MemberDto {
         private String password;
         private String image;
         private Organization organization;
-        private MemberRole role;
+        private List<String> roles;
         private List<Board> boards;
         private List<Comment> comments;
     }
@@ -49,9 +49,18 @@ public class MemberDto {
     @Builder
     @Getter
     @Setter
-    public static class LoginRequest {
+    public static class SignInRequest {
         private String id;
         private String password;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class SignInResponse{
+        private String result;
     }
 
     @NoArgsConstructor
@@ -63,7 +72,7 @@ public class MemberDto {
         private String id;
         private String image;
         private Organization organization;
-        private MemberRole role;
+        private List<String> roles;
         private List<Board> boards;
         private List<Comment> comments;
     }
@@ -76,7 +85,7 @@ public class MemberDto {
     public static class SimpleResponse {
         private String id;
         private String image;
-        private MemberRole role;
+        private List<String> roles;
     }
 
 }

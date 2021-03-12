@@ -16,7 +16,7 @@ public class MemberMapper {
 
         retValue.setId(member.getId());
         retValue.setImage(member.getImage());
-        retValue.setRole(member.getRole());
+        retValue.setRoles(member.getRoles());
 
         return retValue;
     }
@@ -27,7 +27,7 @@ public class MemberMapper {
 
         retValue.setId(member.getId());
         retValue.setImage(member.getImage());
-        retValue.setRole(member.getRole());
+        retValue.setRoles(member.getRoles());
         retValue.setOrganization(member.getOrganization());
         retValue.setBoards(member.getBoards());
         retValue.setComments(member.getComments());

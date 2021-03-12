@@ -3,9 +3,11 @@ package com.mooc.moocServer.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mooc.moocServer.dto.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -51,7 +53,7 @@ public class ControllerTestUtility {
         MemberDto.SignupRequest dto = new MemberDto.SignupRequest(id, "test-password");
         String member = objectMapper.writeValueAsString(dto);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/member")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
                 .content(member)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -62,6 +64,27 @@ public class ControllerTestUtility {
         String resultString = result.getResponse().getContentAsString();
         return objectMapper.readValue(resultString, MemberDto.Response.class);
     }
+
+    // login
+    public static MemberDto.SignInResponse signin(MockMvc mockMvc, ObjectMapper objectMapper, String id, String password, ResultMatcher expect) throws Exception {
+        if(expect == null){
+            expect = MockMvcResultMatchers.status().isOk();
+        }
+        MemberDto.SignInRequest dto = new MemberDto.SignInRequest(id, password);
+        String member = objectMapper.writeValueAsString(dto);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/signin")
+                .content(member)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(expect)
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        String resultString = result.getResponse().getContentAsString();
+        return objectMapper.readValue(resultString, MemberDto.SignInResponse.class);
+    }
+
 
     // get member
     public static MemberDto.Response getMember(MockMvc mockMvc, ObjectMapper objectMapper, String... args) throws Exception {
