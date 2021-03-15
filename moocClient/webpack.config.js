@@ -12,6 +12,7 @@ module.exports = {
     // babel-polyfill은 런타임시 현재 브라우저에서 지원하지 함수를 찾아서, object에 prototype을 붙여주는 역할을 한다.
     // babel은 컴파일 타임에 실행되고, babel-polyfill은 런타임시에 실행된다.
     app: ['babel-polyfill', './index.web.js'],
+    // app: ['./index.web.js'],
   },
   output: {
     filename: 'bundle.js',
@@ -61,6 +62,7 @@ module.exports = {
   },
   plugins: [HTMLWebpackPluginConfig],
   devServer: {
+    port:3000,
     open: false,
     historyApiFallback: true,
     contentBase: './',

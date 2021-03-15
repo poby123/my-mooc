@@ -26,7 +26,11 @@ export default function HomeStackScreen() {
           ),
         }}
       />
-      <HomeStack.Screen name="Board" component={BoardComponent} options={HeaderOptions} />
+      <HomeStack.Screen
+        name="Board"
+        component={BoardComponent}
+        options={HeaderOptions}
+      />
     </HomeStack.Navigator>
   );
 }

@@ -21,7 +21,7 @@ const styles = {
   profileImage: {
     width: '50px',
     height: '50px',
-    borderRadius: '50%',
+    borderRadius: 1000,
     marginRight: '1em',
   },
   modal: {
@@ -32,7 +32,9 @@ const styles = {
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#FFFFFF',
-    border: '1px solid gray',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderStyle: 'solid',
   },
 
   contentContainer: {
@@ -69,7 +71,10 @@ const styles = {
     flex: 8,
   },
   commentPostButton: {
-    border: '1px solid red',
+    borderWidth: 1,
+    borderColor: 'red',
+    borderStyle: 'solid',
+    // : '1px solid red',
   },
 
   /* */
@@ -82,11 +87,13 @@ const styles = {
     flexDirection: 'column',
   },
   postSubContainer: {
-    borderRadius: '5px',
+    borderRadius: 5,
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     alignItems: 'center',
-    border: '1px solid gray',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderStyle: 'solid',
     padding: '1em',
   },
   postSelect: {
@@ -96,8 +103,10 @@ const styles = {
     flex: 5,
   },
   postInput: {
-    borderRadius: '5px',
-    border: '1px solid gray',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderStyle: 'solid',
     padding: '1em',
     backgroundColor: '#FFFFFF',
     height: '50vh',
