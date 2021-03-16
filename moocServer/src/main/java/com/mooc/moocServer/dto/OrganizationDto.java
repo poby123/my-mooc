@@ -26,7 +26,7 @@ public class OrganizationDto {
     @Setter
     public static class Response {
         private String id;
-        private List<Category> categories;
+        private List<CategoryDto.SimpleResponse> categories;
         private List<MemberDto.SimpleResponse> members;
     }
 

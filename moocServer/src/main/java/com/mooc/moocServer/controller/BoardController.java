@@ -4,6 +4,7 @@ import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.service.BoardService;
 import com.mooc.moocServer.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public ResponseEntity<?> getBoards(@RequestParam("category") Long categoryId) {
-        List<BoardDto.Response> res = boardService.getBoards(categoryId);
+    public ResponseEntity<?> getBoards(@RequestParam("category") Long categoryId, Pageable pageable) {
+        List<BoardDto.Response> res = boardService.getBoards(categoryId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

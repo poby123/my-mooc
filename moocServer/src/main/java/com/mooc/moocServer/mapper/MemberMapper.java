@@ -2,11 +2,13 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.entity.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class MemberMapper {
 
@@ -28,7 +30,7 @@ public class MemberMapper {
         retValue.setId(member.getId());
         retValue.setImage(member.getImage());
         retValue.setRoles(member.getRoles());
-        retValue.setOrganization(member.getOrganization());
+        retValue.setOrganizationId(member.getOrganization().getId());
         retValue.setBoards(member.getBoards());
         retValue.setComments(member.getComments());
 

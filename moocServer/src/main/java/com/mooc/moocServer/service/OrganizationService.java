@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,24 +30,22 @@ public class OrganizationService {
 
     public List<OrganizationDto.Response> getAllOrganizations() {
         List<Organization> all = organizationRepository.findAll();
-        if(all == null){
-            throw new NullPointerException("조직이 존재하지 않습니다.");
-        }
         return organizationMapper.organizationListToResponseDtoList(all);
     }
 
-    public OrganizationDto.Response getOrganization(@NonNull String organizationId) {
-        Organization o = organizationRepository.findOne(organizationId);
-        if(o == null){
-            throw new NullPointerException("찾으시는 " + organizationId + "가 존재하지 않습니다.");
-        }
-        return organizationMapper.organizationToResponseDto(o);
+    public OrganizationDto.Response getOrganization(@NonNull String organizationId) throws NullPointerException {
+        Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
+        Organization organization = organizationOptional.orElseThrow(() ->
+                new NullPointerException("찾으시는 " + organizationId + "가 존재하지 않습니다.")
+        );
+
+        return organizationMapper.organizationToResponseDto(organizationOptional.get());
     }
 
     // utility
     private void validateDuplicateOrganization(Organization organization) {
-        List<Organization> organizationList = organizationRepository.findById(organization.getId());
-        if (!organizationList.isEmpty()) {
+        Optional<Organization> organizationOptional = organizationRepository.findById(organization.getId());
+        if (organizationOptional.isPresent()) {
             throw new IllegalStateException("이미 존재하는 조직입니다.");
         }
     }

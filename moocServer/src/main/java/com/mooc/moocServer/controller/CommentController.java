@@ -3,6 +3,7 @@ package com.mooc.moocServer.controller;
 import com.mooc.moocServer.dto.CommentDto;
 import com.mooc.moocServer.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/comment")
-    public ResponseEntity<?> getComment(@RequestParam("board") Long boardId) {
-        List<CommentDto.Response> res = commentService.getComments(boardId);
+    public ResponseEntity<?> getComments(@RequestParam("board") Long boardId, Pageable pageable) {
+        List<CommentDto.Response> res = commentService.getComments(boardId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

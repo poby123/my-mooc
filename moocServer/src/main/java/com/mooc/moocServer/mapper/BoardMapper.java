@@ -2,15 +2,17 @@ package com.mooc.moocServer.mapper;
 
 import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.entity.Board;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class BoardMapper {
 
-    private MemberMapper memberMapper = new MemberMapper();
+    private final MemberMapper memberMapper;
 
     // Board -> Dto.Response
     public BoardDto.Response boardToBoardResponse(Board board){

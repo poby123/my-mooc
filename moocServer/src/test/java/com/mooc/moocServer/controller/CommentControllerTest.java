@@ -51,14 +51,21 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void getComment() throws Exception {
+    public void 글에있는댓글가져오기() throws Exception {
         setup();
         // 댓글 추가
-        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content");
-        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content1");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content2");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content3");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content4");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content5");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content6");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content7");
+        ControllerTestUtility.addComment(mockMvc, objectMapper, "test-member-id", 2L, "comment-content8");
 
-        // 글 댓글들 가져오기
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/comment?board=2")
+
+        // 글 댓글들 가져오기 - 0페이지
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/comment?board=2&page=0&size=3&sort=id,DESC")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -71,8 +78,26 @@ public class CommentControllerTest {
         );
         for (CommentDto.Response cd : res) {
             assertEquals("글쓴이를 확인합니다.", "test-member-id", cd.getWriter().getId());
-            assertEquals("글 내용을 확인합니다.", "comment-content", cd.getContent());
             assertEquals("댓글의 보드 아이디를 확인합니다.","2", String.valueOf(cd.getBoardId()));
+            log.info("글 내용을 확인합니다 : " + cd.getContent());
+        }
+
+        // 글 댓글들 가져오기 - 1페이지
+        result = mockMvc.perform(MockMvcRequestBuilders.get("/comment?board=2&page=1&size=3&sort=id,DESC")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        resultString = result.getResponse().getContentAsString();
+        res = objectMapper.readValue(
+                resultString,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, CommentDto.Response.class)
+        );
+        for (CommentDto.Response cd : res) {
+            assertEquals("글쓴이를 확인합니다.", "test-member-id", cd.getWriter().getId());
+            assertEquals("댓글의 보드 아이디를 확인합니다.","2", String.valueOf(cd.getBoardId()));
+            log.info("글 내용을 확인합니다 : " + cd.getContent());
         }
     }
 

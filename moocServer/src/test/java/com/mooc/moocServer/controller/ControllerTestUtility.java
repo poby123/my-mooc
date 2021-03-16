@@ -175,7 +175,7 @@ public class ControllerTestUtility {
 
     // add comment
     public static CommentDto.Response addComment(MockMvc mockMvc, ObjectMapper objectMapper,String writerId, Long boardId, String commentContent) throws Exception{
-        String content = objectMapper.writeValueAsString(new CommentDto.AddRequest("test-member-id", 2L, "comment-content"));
+        String content = objectMapper.writeValueAsString(new CommentDto.AddRequest(writerId, boardId, commentContent));
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/comment")
                 .content(content)

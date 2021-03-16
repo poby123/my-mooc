@@ -71,7 +71,7 @@ public class MemberDto {
     public static class Response {
         private String id;
         private String image;
-        private Organization organization;
+        private String organizationId;
         private List<String> roles;
         private List<Board> boards;
         private List<Comment> comments;

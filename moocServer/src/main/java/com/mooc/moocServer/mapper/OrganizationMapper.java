@@ -1,5 +1,6 @@
 package com.mooc.moocServer.mapper;
 
+import com.mooc.moocServer.dto.CategoryDto;
 import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.dto.OrganizationDto;
 import com.mooc.moocServer.entity.Organization;
@@ -11,8 +12,10 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class OrganizationMapper{
+public class OrganizationMapper {
+
     private final MemberMapper memberMapper;
+    private final CategoryMapper categoryMapper;
 
     // Organization -> Dto.Info
     public OrganizationDto.Info organizationToInfoDto(Organization o) {
@@ -20,16 +23,17 @@ public class OrganizationMapper{
     }
 
     // Organization -> Dto.Response
-    public OrganizationDto.Response organizationToResponseDto(Organization o){
+    public OrganizationDto.Response organizationToResponseDto(Organization o) {
         List<MemberDto.SimpleResponse> members = memberMapper.memberListToMemberSimpleResponseList(o.getMembers());
-        return new OrganizationDto.Response(o.getId(), o.getCategories(), members);
+        List<CategoryDto.SimpleResponse> simpleCategories = categoryMapper.categoryListToCategorySimpleResponseList(o.getCategories());
+        return new OrganizationDto.Response(o.getId(), simpleCategories, members);
     }
 
     // List<Organization> -> List<Dto.Info>
     public List<OrganizationDto.Info> organizationListToInfoDtoList(List<Organization> organizations) {
         List<OrganizationDto.Info> ret = new ArrayList<>(organizations.size());
 
-        for(Organization o : organizations){
+        for (Organization o : organizations) {
             ret.add(organizationToInfoDto(o));
         }
 
@@ -40,7 +44,7 @@ public class OrganizationMapper{
     public List<OrganizationDto.Response> organizationListToResponseDtoList(List<Organization> organizations) {
         List<OrganizationDto.Response> ret = new ArrayList<>(organizations.size());
 
-        for(Organization o : organizations){
+        for (Organization o : organizations) {
             ret.add(organizationToResponseDto(o));
         }
 

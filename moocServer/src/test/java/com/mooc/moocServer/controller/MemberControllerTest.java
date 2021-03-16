@@ -98,7 +98,7 @@ public class MemberControllerTest {
 
         // member 수정 및 확인
         MemberDto.Response res = ControllerTestUtility.setMemberOrganization(mockMvc, objectMapper, "test-member-id", "test-organization-id");
-        assertEquals("멤버의 조직을 확인합니다.", "test-organization-id", res.getOrganization().getId());
+        assertEquals("멤버의 조직을 확인합니다.", "test-organization-id", res.getOrganizationId());
 
         // organization 확인
         OrganizationDto.Response response = ControllerTestUtility.getOrganization(mockMvc, objectMapper);

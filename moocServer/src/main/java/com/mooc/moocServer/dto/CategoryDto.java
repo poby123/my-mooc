@@ -47,4 +47,14 @@ public class CategoryDto {
         private List<BoardDto.Response> boards;
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @ToString
+    public static class SimpleResponse {
+        private Long id;
+        private String name;
+    }
+
 }

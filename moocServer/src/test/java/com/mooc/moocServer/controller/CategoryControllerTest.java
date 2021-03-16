@@ -116,7 +116,7 @@ public class CategoryControllerTest {
     public void 전체카테고리를조회할때조직이없는경우() throws Exception{
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category?organization=test-organization-id")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.status().isOk()) // 뭘로 설계할지 결정...
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
     }

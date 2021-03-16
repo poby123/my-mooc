@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +27,11 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto.Response addCategory(String name, String organizationId) throws NullPointerException {
-        Organization organization = organizationRepository.findOne(organizationId);
-
-        if (organization == null) {
-            throw new NullPointerException("존재하지 않는 조직에 카테고리를 추가하려고 했습니다.");
-        }
+        // 조직 조회
+        Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
+        Organization organization = organizationOptional.orElseThrow(
+                () -> new NullPointerException("존재하지 않는 조직에 카테고리를 추가하려고 했습니다.")
+        );
 
         Category category = Category.createCategory(name, organization);
 
@@ -41,22 +42,14 @@ public class CategoryService {
     }
 
     public CategoryDto.Response getCategory(@NonNull Long id) throws NullPointerException {
-        Category category = categoryRepository.findOne(id);
-
-        if (category == null) {
-            throw new NullPointerException("찾는 카테고리가 존재하지 않습니다.");
-        }
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        Category category = categoryOptional.orElseThrow(() -> new NullPointerException("찾는 카테고리가 존재하지 않습니다."));
 
         return categoryMapper.categoryToCategoryResponse(category);
     }
 
-    public List<CategoryDto.Response> getCategories(@NonNull String organizationId) throws NullPointerException{
-        Organization organization = organizationRepository.findOne(organizationId);
-
-        if(organization == null){
-            throw new NullPointerException("찾는 카테고리가 속해있는 조직이 존재하지 않습니다.");
-        }
-
-        return categoryMapper.categoryListToCategoryResponseList(organization.getCategories());
+    public List<CategoryDto.Response> getCategories(@NonNull String organizationId) throws NullPointerException {
+        List<Category> categories = categoryRepository.findByOrganizationId(organizationId);
+        return categoryMapper.categoryListToCategoryResponseList(categories);
     }
 }

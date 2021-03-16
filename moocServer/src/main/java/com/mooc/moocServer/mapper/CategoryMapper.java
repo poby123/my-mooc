@@ -26,12 +26,28 @@ public class CategoryMapper {
         return res;
     }
 
+    // Category -> Dto.SimpleResponse
+    public CategoryDto.SimpleResponse categoryToCategorySimpleResponse(Category category){
+        return new CategoryDto.SimpleResponse(category.getId(), category.getName());
+    }
+
     // List<Category> -> List<Dto.Response>
     public List<CategoryDto.Response> categoryListToCategoryResponseList(List<Category> list){
         List<CategoryDto.Response> ret = new ArrayList<>(list.size());
 
         for(Category c : list){
             ret.add(categoryToCategoryResponse(c));
+        }
+
+        return ret;
+    }
+
+    // List<Category> -> List<Dto.SimpleResponse>
+    public List<CategoryDto.SimpleResponse> categoryListToCategorySimpleResponseList(List<Category> list){
+        List<CategoryDto.SimpleResponse> ret = new ArrayList<>(list.size());
+
+        for(Category c : list){
+            ret.add(categoryToCategorySimpleResponse(c));
         }
 
         return ret;

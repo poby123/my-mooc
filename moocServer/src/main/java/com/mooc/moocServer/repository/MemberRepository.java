@@ -1,21 +1,8 @@
 package com.mooc.moocServer.repository;
 
 import com.mooc.moocServer.entity.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
+public interface MemberRepository extends JpaRepository<Member, String> {
 
-@Repository
-@RequiredArgsConstructor
-public class MemberRepository {
-    private final EntityManager em;
-
-    public void save(Member member) {
-        em.persist(member);
-    }
-
-    public Member findOne(String id) {
-        return em.find(Member.class, id);
-    }
 }
