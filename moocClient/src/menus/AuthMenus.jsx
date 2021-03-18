@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import SigninComponent from '../components/SigninComponent';
+import SignupComponent from '../components/SignupComponent';
 import HeaderOptions from '../HeaderOptions';
 import TabMenus from './TabMenus';
 
@@ -12,7 +13,7 @@ class AuthMenus extends React.PureComponent {
   }
   render() {
     return (
-      <Stack.Navigator initialRouteName="Signin">
+      <Stack.Navigator initialRouteName="TabMenus">
         <Stack.Screen
           name="Signin"
           component={SigninComponent}
@@ -20,6 +21,12 @@ class AuthMenus extends React.PureComponent {
             ...HeaderOptions,
           }}
         />
+        <Stack.Screen
+          name="Signup"
+          component={SignupComponent}
+          options={{
+            ...HeaderOptions,
+          }}/>
         <Stack.Screen
           name="TabMenus"
           component={TabMenus}

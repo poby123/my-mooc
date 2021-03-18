@@ -4,28 +4,19 @@ import Theme from '../Theme';
 import SpacingComponent from './SpacingComponent';
 
 import {connect} from 'react-redux';
-import {signin, signout, signup} from '../actions/auth';
+import {signup} from '../actions/auth';
 
 const styles = StyleSheet.create(Theme);
 
-class SigninScreen extends React.PureComponent {
+class SignupScreen extends React.PureComponent {
   constructor(props) {
     super(props);
+    console.log(this.props);
     this.state = {
       id: '',
       password: '',
+      passwordCheck : ''
     };
-  }
-
-  componentDidMount() {
-    // this.props
-    //   .signin('test-id', 'test-password')
-    //   .then((result) => {
-    //     console.log('success : ' + result);
-    //   })
-    //   .catch((error) => {
-    //     console.log('error : ' + error);
-    //   });
   }
 
   render() {
@@ -33,7 +24,7 @@ class SigninScreen extends React.PureComponent {
       <View style={styles.signinContainer}>
         <View style={styles.signinSubContainer}>
           <SpacingComponent spacing={4} />
-          <Text style={styles.signinTitle}>LOGIN</Text>
+          <Text style={styles.signinTitle}>SIGN UP</Text>
           <SpacingComponent spacing={4} />
           <TextInput
             value={this.state.id}
@@ -48,13 +39,16 @@ class SigninScreen extends React.PureComponent {
             placeholder="Password"
             style={styles.signinInput}
           />
+          <SpacingComponent />
+          <TextInput
+            value={this.state.password}
+            onChangeText={(passwordCheck) => this.setState({passwordCheck})}
+            placeholder="Password 확인"
+            style={styles.signinInput}
+          />
           <SpacingComponent spacing={4} />
           <View style={styles.signinButtonWrapper}>
-            <Button title={'로그인'} />
-          </View>
-          <SpacingComponent />
-          <View style={styles.signinButtonWrapper}>
-            <Button color="coral" title={'회원가입'} onPress={()=>this.props.navigation.push('Signup')}/>
+            <Button color="coral" title={'회원가입'} />
           </View>
           <SpacingComponent spacing={4} />
         </View>
@@ -70,9 +64,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = () => {
   return {
-    signin,
-    signout,
+    signup,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps())(SigninScreen);
+export default connect(mapStateToProps, mapDispatchToProps())(SignupScreen);
