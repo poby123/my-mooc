@@ -43,8 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // 모두에게 혀용할 주소 설정
-                .antMatchers("/signin", "/signup").permitAll()
+                .antMatchers(
+                        "/signin", "/signup"
 
+                ).permitAll()
+
+                // 테스트시에는 편의를 위해 주석처리.
                 // 그 밖에 요청은 인증된 회원만 접근하도록 설정.
                 .anyRequest().hasRole("USER")
 

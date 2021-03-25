@@ -7,13 +7,23 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         #        show_sql: true
         format_sql: true
   jwt:
     secret: t$*10)2jc)1-
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+      location: C:\Users\User\Desktop\uploads
+
+file.upload-dir: C:\Users\User\Desktop\uploads
 
 logging:
   level:
