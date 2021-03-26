@@ -9,9 +9,13 @@ public class UploadFileMapper {
     public static FileDto.UploadFileResponse uploadFileToUploadFileResponse(UploadFile uploadFile) {
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/file/download/")
-                .path(uploadFile.getFileName())
+                .path(uploadFile.getFileId().toString())
                 .toUriString();
 
-        return new FileDto.UploadFileResponse(uploadFile.getFileName(), fileDownloadUri, uploadFile.getMimeType(), uploadFile.getSize());
+        return new FileDto.UploadFileResponse(uploadFile.getOriginalFileName(), fileDownloadUri, uploadFile.getMimeType(), uploadFile.getSize());
+    }
+
+    public static FileDto.DownloadFileResponse uploadFileToDownloadResponse(UploadFile uploadFile) {
+        return new FileDto.DownloadFileResponse(uploadFile.getOriginalFileName(), uploadFile.getMimeType(), uploadFile.getSize(), null);
     }
 }

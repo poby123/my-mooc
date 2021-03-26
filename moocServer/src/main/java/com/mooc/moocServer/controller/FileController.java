@@ -10,10 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,18 +33,14 @@ public class FileController {
         return Arrays.asList(files).stream().map(file -> upload(file)).collect(Collectors.toList());
     }
 
-    @GetMapping("/file/download/{fileName:.+}")
-    public ResponseEntity<Resource> download(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as resource
-        Resource resource = fileService.loadFileAsResource(fileName);
+    @GetMapping("/file/download/{id}")
+    public ResponseEntity<Resource> download(@PathVariable Long id, HttpServletRequest request) {
+
+        FileDto.DownloadFileResponse response = fileService.getFile(id);
+        Resource resource = response.getResource();
 
         // Determine file content's type
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException e) {
-            log.info("Could not determine file type.");
-        }
+        String contentType = response.getFileType();
 
         // Fallback to the default content type if type could not be determined.
         if (contentType == null) {
@@ -55,7 +49,7 @@ public class FileController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + response.getOriginalFileName() + "\"")
                 .body(resource);
     }
 
