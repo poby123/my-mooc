@@ -1,6 +1,7 @@
 package com.mooc.moocServer.service;
 
 import com.mooc.moocServer.dto.FileDto;
+import com.mooc.moocServer.entity.Board;
 import com.mooc.moocServer.entity.UploadFile;
 import com.mooc.moocServer.exception.FileStorageException;
 import com.mooc.moocServer.exception.MyFileNotFoundException;
@@ -13,14 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,11 +33,15 @@ public class FileService {
 
     private final Path fileStorageLocation;
     private final UploadFileRepository uploadFileRepository;
+    private final UploadFileMapper uploadFileMapper;
 
     @Autowired
-    public FileService(FileStorageProperties fileStorageProperties, UploadFileRepository uploadFileRepository) {
+    public FileService(FileStorageProperties fileStorageProperties,
+                       UploadFileRepository uploadFileRepository,
+                       UploadFileMapper uploadFileMapper) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.uploadFileRepository = uploadFileRepository;
+        this.uploadFileMapper = uploadFileMapper;
 
         try {
             Files.createDirectories(this.fileStorageLocation);
@@ -49,7 +51,7 @@ public class FileService {
     }
 
     @Transactional
-    public FileDto.UploadFileResponse store(MultipartFile file) {
+    public UploadFile store(MultipartFile file, Board board) {
         try {
             // original name
             String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -73,10 +75,11 @@ public class FileService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             // db save
-            UploadFile uploadFile = UploadFile.createUploadFile(originalFilename, fileName, targetLocation.toString(), file.getSize(), fileType);
+            UploadFile uploadFile = UploadFile.createUploadFile(originalFilename, fileName, targetLocation.toString(), file.getSize(), fileType, board);
             uploadFileRepository.save(uploadFile);
 
-            return UploadFileMapper.uploadFileToUploadFileResponse(uploadFile);
+            return uploadFile;
+            // return UploadFileMapper.uploadFileToUploadFileResponse(uploadFile);
 
         } catch (Exception e) {
             throw new FileStorageException("Could not store file. Please try again.", e);
@@ -91,7 +94,7 @@ public class FileService {
             UploadFile uploadFile = fileOptional.orElseThrow(() -> new MyFileNotFoundException("File not found"));
 
             // mapping entity to dto
-            FileDto.DownloadFileResponse downloadFileResponse = UploadFileMapper.uploadFileToDownloadResponse(uploadFile);
+            FileDto.DownloadFileResponse downloadFileResponse = uploadFileMapper.EntityToDownloadResponse(uploadFile);
 
             // get file resource
             Path path = Paths.get(uploadFile.getFilePath());

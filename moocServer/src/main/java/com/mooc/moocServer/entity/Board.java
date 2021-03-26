@@ -1,20 +1,20 @@
 package com.mooc.moocServer.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
     @Id
@@ -42,20 +42,40 @@ public class Board {
     @JsonManagedReference("board-comment")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonManagedReference("board-file")
+    private List<UploadFile> files = new ArrayList<>();
+
+    @CreationTimestamp
+    @Column(name = "board_reg_date")
+    Date regDate;
+
+    @UpdateTimestamp
+    @Column(name = "board_edit_date")
+    Date editDate;
+
     // == 생성 메서드 == //
     public static Board createBoard(Member member, Category category, String content) {
         Board board = new Board();
-        board.setWriter(member);
-        board.setCategory(category);
-        board.setContent(content);
-        board.setGood(0L);
-        board.setComments(new ArrayList<>());
+        board.writer = member;
+        board.category = category;
+        board.content = content;
+        board.good = 0L;
+        board.comments = new ArrayList<>();
 
         return board;
     }
 
     // == 연관관계 메서드 == //
-    public void addComment(Comment comment){
+    public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void addFile(UploadFile file) {
+        this.files.add(file);
+    }
+
+    public void setFiles(List<UploadFile> uploadedFiles) {
+        this.files = uploadedFiles;
     }
 }

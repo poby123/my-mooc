@@ -13,6 +13,7 @@ import java.util.List;
 public class BoardMapper {
 
     private final MemberMapper memberMapper;
+    private final UploadFileMapper uploadFileMapper;
 
     // Board -> Dto.Response
     public BoardDto.Response boardToBoardResponse(Board board){
@@ -23,6 +24,7 @@ public class BoardMapper {
         res.setGood(board.getGood());
         res.setWriter(memberMapper.memberToMemberSimpleResponse(board.getWriter()));
         res.setCommentList(board.getComments());
+        res.setFileList(uploadFileMapper.EntityListToUploadFileResponseList(board.getFiles()));
 
         return res;
     }

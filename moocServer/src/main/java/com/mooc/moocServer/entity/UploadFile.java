@@ -1,9 +1,11 @@
 package com.mooc.moocServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,12 +34,17 @@ public class UploadFile {
     @Column(name = "upload_file_mime_type", nullable = false)
     private String mimeType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    @JsonBackReference("board-file")
+    Board board;
+
     @CreationTimestamp
     @Column(name = "upload_file_reg_date")
     private Date regDate;
 
     // == 생성 메서드 == //
-    public static UploadFile createUploadFile(String originalFileName, String fileName, String filePath, long size, String mimeType) {
+    public static UploadFile createUploadFile(String originalFileName, String fileName, String filePath, long size, String mimeType, Board board) {
         UploadFile uploadFile = new UploadFile();
 
         uploadFile.originalFileName = originalFileName;
@@ -45,6 +52,7 @@ public class UploadFile {
         uploadFile.filePath = filePath;
         uploadFile.size = size;
         uploadFile.mimeType = mimeType;
+        uploadFile.board = board;
 
         return uploadFile;
     }

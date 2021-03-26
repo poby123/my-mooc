@@ -3,11 +3,13 @@ package com.mooc.moocServer.controller;
 import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.service.BoardService;
 import com.mooc.moocServer.service.CategoryService;
+import com.mooc.moocServer.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final CategoryService categoryService;
+    private final FileService fileService;
 
     @GetMapping("/board/{boardId}")
     public ResponseEntity<?> getBoard(@PathVariable("boardId") Long boardId) {
@@ -30,8 +33,9 @@ public class BoardController {
     }
 
     @PostMapping("/board")
-    public ResponseEntity<?> addBoard(@RequestBody BoardDto.AddRequest boardDto) {
-        BoardDto.Response res = boardService.addBoard(boardDto.getWriterId(), boardDto.getCategoryId(), boardDto.getContent());
+    public ResponseEntity<?> addBoard(@RequestParam("file") MultipartFile[] files, BoardDto.AddRequest boardDto) {
+        BoardDto.Response res = boardService.addBoard(boardDto.getWriterId(), boardDto.getCategoryId(), boardDto.getContent(), files);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
+
 }

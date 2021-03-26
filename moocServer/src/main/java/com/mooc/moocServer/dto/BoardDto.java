@@ -51,6 +51,7 @@ public class BoardDto {
         private String content;
         private Long good;
         private List<Comment> commentList;
+        private List<FileDto.UploadFileResponse> fileList;
     }
 
 

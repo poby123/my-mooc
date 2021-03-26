@@ -4,30 +4,37 @@ import com.mooc.moocServer.dto.BoardDto;
 import com.mooc.moocServer.entity.Board;
 import com.mooc.moocServer.entity.Category;
 import com.mooc.moocServer.entity.Member;
+import com.mooc.moocServer.entity.UploadFile;
 import com.mooc.moocServer.mapper.BoardMapper;
 import com.mooc.moocServer.repository.BoardRepository;
 import com.mooc.moocServer.repository.CategoryRepository;
 import com.mooc.moocServer.repository.MemberRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final BoardMapper boardMapper;
+    private final FileService fileService;
 
     @Transactional
-    public BoardDto.Response addBoard(@NonNull String memberId, @NonNull Long categoryId, @NonNull String content) throws NullPointerException {
+    public BoardDto.Response addBoard(@NonNull String memberId, @NonNull Long categoryId, @NonNull String content, MultipartFile[] files) throws NullPointerException {
 
         // 멤버 가져오기
         Optional<Member> memberOptional = memberRepository.findById(memberId);
@@ -39,6 +46,12 @@ public class BoardService {
 
         // 글 만들기
         Board board = Board.createBoard(member, category, content);
+
+        // 첨부 파일 저장.
+        if(files != null && files.length > 0 && !files[0].isEmpty()){
+            List<UploadFile> uploadedFiles = Arrays.asList(files).stream().map(file -> fileService.store(file, board)).collect(Collectors.toList());
+            board.setFiles(uploadedFiles);
+        }
 
         member.addBoard(board);
         category.addBoard(board);
