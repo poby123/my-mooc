@@ -36,7 +36,6 @@ public class BoardDto {
     @Getter
     @Setter
     public static class AddRequest {
-        private String writerId;
         private Long categoryId;
         private String content;
     }

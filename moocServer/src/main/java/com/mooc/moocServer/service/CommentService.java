@@ -27,17 +27,17 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional
-    public CommentDto.Response addComment(CommentDto.AddRequest request) throws NullPointerException {
+    public CommentDto.Response addComment(String memberId, CommentDto.AddRequest commentDto) throws NullPointerException {
         // 멤버 가져오기
-        Optional<Member> memberOptional = memberRepository.findById(request.getWriterId());
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         Member writer = memberOptional.orElseThrow(() -> new NullPointerException("해당 멤버가 존재하지 않습니다."));
 
         // 글 가져오기
-        Optional<Board> boardOptional = boardRepository.findById(request.getBoardId());
+        Optional<Board> boardOptional = boardRepository.findById(commentDto.getBoardId());
         Board board = boardOptional.orElseThrow(() -> new NullPointerException("존재하지 않는 글입니다."));
 
         // 댓글 만들기
-        Comment comment = Comment.createComment(writer, board, request.getContent());
+        Comment comment = Comment.createComment(writer, board, commentDto.getContent());
 
         writer.addComment(comment);
         board.addComment(comment);

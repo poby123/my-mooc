@@ -34,13 +34,7 @@ public class CommentDto {
     @Getter
     @Setter
     public static class AddRequest {
-        @NotNull
-        private String writerId;
-
-        @NotNull
         private Long boardId;
-
-        @NotNull
         private String content;
     }
 

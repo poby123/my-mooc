@@ -7,6 +7,7 @@ import com.mooc.moocServer.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,18 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    @PutMapping("/member")
-    public ResponseEntity<?> updateMember(@RequestParam("member") String memberId, @RequestParam("organization") String organizationId) {
-        MemberDto.Response res = memberService.setOrganization(memberId, organizationId);
+    @GetMapping("/member/me")
+    public ResponseEntity<?> getMemberMe(@AuthenticationPrincipal Member member) {
+        MemberDto.Response res = memberService.getMember(member.getId());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
+    @PutMapping("/member")
+    public ResponseEntity<?> updateMember(@AuthenticationPrincipal Member member, @RequestParam("organization") String organizationId) {
+        MemberDto.Response res = memberService.setOrganization(member.getId(), organizationId);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody MemberDto.SignInRequest signInRequest) throws IllegalAccessException{
