@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, TouchableHighlight, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import WriterComponent from './WriterComponent';
 import ContentComponent from './ContentComponent';
 import Theme from '../Theme';
 import FavoriteComponent from './FavoriteComponent';
+import CommentIcon from '@material-ui/icons/Comment';
+import { IconButton } from '@material-ui/core';
 
 const mockData = [
   {
@@ -14,7 +16,7 @@ const mockData = [
     },
     content: {
       date: '2021.02.10 12:16',
-      image: 'https://cdn.pixabay.com/photo/2016/11/29/04/19/ocean-1867285_1280.jpg',
+      image: ['https://cdn.pixabay.com/photo/2016/11/29/04/19/ocean-1867285_1280.jpg', 'https://file.namu.moe/file/c2790d5985eae82cd1199a4cba2101c131a981542fe03429068587b511c2983b'],
       content:
         'To be able to interact with the screen component, we need to use navigation.setOptions to define our button instead of the options prop. By using navigation.setOptions inside the screen component, we get access to screens props, state, context etc.',
       files: ['file link1, file link2'],
@@ -131,19 +133,26 @@ export default class ListComponent extends React.PureComponent {
     // this.props.navigation.setOptions({ headerTitle: 'MOOC' });
   }
   render() {
-    const renderItem = ({ item }) => (
+    const renderItem = ({item}) => (
       <View style={styles.container}>
         <WriterComponent image={item.writer.image} name={item.writer.name} date={item.content.date} />
-        <TouchableHighlight
+        {/* <TouchableHighlight
           activeOpacity={0.8}
           underlayColor="#DBE8F1"
           onPress={() => {
             this.props.navigation.push('Board', { data: item, category: this.category });
           }}
-        >
-          <ContentComponent image={item.content.image} content={item.content.content} />
-        </TouchableHighlight>
-        <FavoriteComponent favoriteNumber={item.content.favorite} myFavorite={item.content.myFavorite} />
+        > */}
+        <ContentComponent image={item.content.image} content={item.content.content} />
+        {/* </TouchableHighlight> */}
+        <View style={styles.iconContainer}>
+          <IconButton
+            color="inherit"
+            onClick={() => this.props.navigation.push('Board', {data: item, category: this.category})}>
+            <CommentIcon />
+          </IconButton>
+          <FavoriteComponent favoriteNumber={item.content.favorite} myFavorite={item.content.myFavorite} />
+        </View>
       </View>
     );
 

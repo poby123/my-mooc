@@ -19,7 +19,7 @@ export default class FavoriteComponent extends React.PureComponent{
         <IconButton color="inherit" onClick={() => console.log('pressed')}>
           {myFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>
-        <Text styles={{ color: 'red', width: '20px' }}>{favoriteNumber}</Text>
+        <Text styles={{color: 'red'}}>{favoriteNumber}</Text>
       </View>
     );
   }

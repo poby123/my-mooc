@@ -1,6 +1,6 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { IconButton } from '@material-ui/core';
+import {createStackNavigator} from '@react-navigation/stack';
+import {IconButton} from '@material-ui/core';
 import UpdateIcon from '@material-ui/icons/Update';
 import HeaderOptions from '../HeaderOptions';
 import ListComponent from '../components/ListComponent';
@@ -26,11 +26,7 @@ export default function HomeStackScreen() {
           ),
         }}
       />
-      <HomeStack.Screen
-        name="Board"
-        component={BoardComponent}
-        options={HeaderOptions}
-      />
+      <HomeStack.Screen name="Board" component={BoardComponent} options={HeaderOptions} />
     </HomeStack.Navigator>
   );
 }

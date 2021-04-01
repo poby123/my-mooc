@@ -36,6 +36,15 @@ const styles = {
     paddingBottom: '0.5em',
     paddingLeft: '0.5em',
   },
+  swiperContainer: {
+    minHeight: '300px',
+  },
+  contentImageContainer: {
+    flex: 1,
+  },
+  contentImage:{
+    minHeight:'300px'
+  },
   contentContent: {
     fontFamily: 'inherit',
     marginTop: '0.5em',
@@ -67,6 +76,11 @@ const styles = {
     borderColor: 'red',
     borderStyle: 'solid',
     // : '1px solid red',
+  },
+  iconContainer:{
+    flexDirection:'row',
+    justifyContent:'flex-end',
+    paddingRight:'1em'
   },
 
   /* 포스팅 글쓰기 관련 스타일 */

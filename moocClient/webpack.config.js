@@ -62,7 +62,7 @@ module.exports = {
   },
   plugins: [HTMLWebpackPluginConfig],
   devServer: {
-    port:3000,
+    port: 3000,
     open: false,
     historyApiFallback: true,
     contentBase: './',
