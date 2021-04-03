@@ -3,6 +3,7 @@ package com.mooc.moocServer.service;
 import com.mooc.moocServer.dto.MemberDto;
 import com.mooc.moocServer.entity.Member;
 import com.mooc.moocServer.entity.Organization;
+import com.mooc.moocServer.exception.SignInFailureException;
 import com.mooc.moocServer.mapper.MemberMapper;
 import com.mooc.moocServer.repository.MemberRepository;
 import com.mooc.moocServer.repository.OrganizationRepository;
@@ -75,13 +76,13 @@ public class MemberService implements UserDetailsService {
         return memberMapper.memberListToMemberSimpleResponseList(members);
     }
 
-    public Member signIn(MemberDto.SignInRequest req) throws NullPointerException, IllegalAccessException {
+    public Member signIn(MemberDto.SignInRequest req) throws SignInFailureException {
         Optional<Member> memberOptional = memberRepository.findById(req.getId());
-        Member member = memberOptional.orElseThrow(() -> new NullPointerException("해당 아이디가 존재하지 않습니다."));
+        Member member = memberOptional.orElseThrow(() -> new SignInFailureException("로그인에 실패했습니다."));
 
         // 비밀번호 비교
         if (!passwordEncoder.matches(req.getPassword(), member.getPassword())) {
-            throw new IllegalAccessException("로그인에 실패했습니다");
+            throw new SignInFailureException("로그인에 실패했습니다");
         }
         return member;
     }
